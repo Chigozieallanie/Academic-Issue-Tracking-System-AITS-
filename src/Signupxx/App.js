@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./loginxx/Login";
-import About from "./loginxx/About";
-import Signup from "./Signupxx/signup";
+import Login from "./Login";
+import About from "./About";
 
 function App() {
   return (
@@ -10,11 +9,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/about" element={<About />} />
-        <Route path="/signup" element={<Signup />} />
-        
       </Routes>
     </Router>
   );
-
 }
-  export default App;
+
+export default App;
