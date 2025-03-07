@@ -20,10 +20,30 @@ const Dashboard = () => {
   const [document, setDocument] = useState(null);
   const [lecturer, setLecturer] = useState("");
   const [courseCode, setCourseCode] = useState("");
+  const [courseUnits, setCourseUnits] = useState([]);
 
   const issueCategories = ["Academic", "Administrative", "Technical", "Financial", "Other"];
   const lecturers = ["Lecturer A", "Lecturer B", "Lecturer C"];
   const courseCodes = ["CS101", "CS102", "CS103"];
+
+  const courses = {
+    "Computer Science": {
+      "1": ["Introduction to Programming", "Data Structures", "Discrete Mathematics"],
+      "2": ["Algorithms", "Operating Systems", "Database Systems"]
+    },
+    "Medicine": {
+      "1": ["Anatomy", "Physiology", "Biochemistry"],
+      "2": ["Pathology", "Pharmacology", "Microbiology"]
+    },
+    "Economics": {
+      "1": ["Microeconomics", "Macroeconomics", "Statistics"],
+      "2": ["Econometrics", "Development Economics", "Public Finance"]
+    },
+    "History": {
+      "1": ["Ancient History", "Medieval History", "Modern History"],
+      "2": ["African History", "Asian History", "European History"]
+    }
+  };
 
   const handleReportIssue = () => {
     if (!category) {
@@ -62,6 +82,18 @@ const Dashboard = () => {
       )
     );
     alert(`Issue #${issueId} has been resolved.`);
+  };
+
+  const handleCourseChange = (e) => {
+    const selectedCourse = e.target.value;
+    setCourse(selectedCourse);
+    setCourseUnits(courses[selectedCourse][semester] || []);
+  };
+
+  const handleSemesterChange = (e) => {
+    const selectedSemester = e.target.value;
+    setSemester(selectedSemester);
+    setCourseUnits(courses[course][selectedSemester] || []);
   };
 
   return (
@@ -123,23 +155,8 @@ const Dashboard = () => {
               </select>
 
               <label>Course:</label>
-              <select value={course} onChange={(e) => setCourse(e.target.value)}>
+              <select value={course} onChange={handleCourseChange}>
                 <option value="">Select Course</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="Information System & Technology">Information System & Technology</option>
-                <option value="Software Engineering">Software Engineering</option>
-                <option value="Library & Information Sciences">Library & Information Science</option>
-                <option value="Law">Law</option>
-                <option value="Business Administration">Business Administration</option>
-                <option value="Economics">Economics</option>
-                <option value="Social Work & Social Administration">Social Work & Social Administration</option>
-                <option value="Journalism & Communication">Journalism & Communication</option>  
-                <option value="Agricultural Engineering">Agricultural Engineering</option>
-                <option value="Civil Engineering">Civil Engineering</option>    
-                <option value="Mechanical Engineering">Mechanical Engineering</option>
-                <option value="Electrical Engineering">Electrical Engineering</option>  
-                <option value="Biomedical Engineering">Biomedical Engineering</option>
-                <option value="Veterinary Medicine">Veterinary Medicine</option>
                 <option value="Computer Science">Computer Science</option>
                 <option value="Medicine">Medicine</option>
                 <option value="Economics">Economics</option>
@@ -156,7 +173,7 @@ const Dashboard = () => {
               </select>
 
               <label>Semester:</label>
-              <select value={semester} onChange={(e) => setSemester(e.target.value)}>
+              <select value={semester} onChange={handleSemesterChange}>
                 <option value="">Select Semester</option>
                 <option value="1">Semester 1</option>
                 <option value="2">Semester 2</option>
@@ -171,6 +188,16 @@ const Dashboard = () => {
             <div className="course-container">
               <h2>My Course Details</h2>
               <p>You are currently enrolled in <strong>{course || "a course"}</strong> under the <strong>{college || "selected college"}</strong>.</p>
+              {courseUnits.length > 0 && (
+                <div>
+                  <h3>Course Units:</h3>
+                  <ul>
+                    {courseUnits.map((unit, index) => (
+                      <li key={index}>{unit}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
 
