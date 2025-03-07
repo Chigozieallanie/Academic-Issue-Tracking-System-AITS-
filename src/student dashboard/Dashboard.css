@@ -1,4 +1,3 @@
-/* General Styles */
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -243,43 +242,21 @@ body {
   }
   
   .logout-container button {
-    margin: 0 40px; /* Adds space between buttons */
+    padding: 10px 20px; /* Shorter buttons */
+    margin: 0 15px; /* Spacing between buttons */
     background: linear-gradient(135deg, #1abc9c, #16a085);
     color: #fff;
     border: none;
-    padding: 10px 25px;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
     font-weight: 500;
-    transition: all 0.3s ease;
-  }
+    transition: all 0.3s ease;}
   
   .logout-container button:hover {
     background: linear-gradient(135deg, #16a085, #1abc9c);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(26, 188, 156, 0.3);
   }
-  .logout-container {
-    text-align: center;
-    padding: 20px;
-  }
+ 
   
-  .logout-container button {
-    margin: 0 10px; /* Adds space between buttons */
-    background: linear-gradient(135deg, #1abc9c, #16a085);
-    color: #fff;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-  
-  .logout-container button:hover {
-    background: linear-gradient(135deg, #16a085, #1abc9c);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(26, 188, 156, 0.3);
-  }

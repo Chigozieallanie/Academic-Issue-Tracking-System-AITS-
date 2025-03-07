@@ -158,6 +158,21 @@ const Dashboard = () => {
               <select value={course} onChange={handleCourseChange}>
                 <option value="">Select Course</option>
                 <option value="Computer Science">Computer Science</option>
+                <option value="Information System & Technology">Information System & Technology</option>
+                <option value="Software Engineering">Software Engineering</option>
+                <option value="Library & Information Sciences">Library & Information Science</option>
+                <option value="Law">Law</option>
+                <option value="Business Administration">Business Administration</option>
+                <option value="Economics">Economics</option>
+                <option value="Social Work & Social Administration">Social Work & Social Administration</option>
+                <option value="Journalism & Communication">Journalism & Communication</option>  
+                <option value="Agricultural Engineering">Agricultural Engineering</option>
+                <option value="Civil Engineering">Civil Engineering</option>    
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Electrical Engineering">Electrical Engineering</option>  
+                <option value="Biomedical Engineering">Biomedical Engineering</option>
+                <option value="Veterinary Medicine">Veterinary Medicine</option>
+                <option value="Computer Science">Computer Science</option>
                 <option value="Medicine">Medicine</option>
                 <option value="Economics">Economics</option>
                 <option value="History">History</option>
