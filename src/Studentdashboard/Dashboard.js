@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./Dashboard.css";
+import { Link, NavLink, Outlet } from "react-router-dom";
 
 const Dashboard = () => {
-  const [activeSection, setActiveSection] = useState("Dashboard");
+  const [activeSection, setActiveSection] = useState("dashboard");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -96,15 +97,19 @@ const Dashboard = () => {
     setCourseUnits(courses[course][selectedSemester] || []);
   };
 
+
   return (
     <div className="dashboard-container">
       <div className="sidebar">
         <h2>STUDENT DASHBOARD</h2>
         <ul>
-          {["Dashboard", "Profile", "My Course", "Report Issue", "Issue Status", "Logout"].map((section) => (
-            <li key={section} className={activeSection === section ? "active" : ""} onClick={() => setActiveSection(section)}>
+          {["dashboard", "profile", "my-Course", "reportIssue", "IssueStatus", "Logout"].map((section) => (
+            <NavLink to={section}>
+
+            <li key={section} >
               {section}
             </li>
+            </NavLink>
           ))}
         </ul>
       </div>
@@ -116,105 +121,18 @@ const Dashboard = () => {
         </header>
 
         <div className="content">
-          {activeSection === "Dashboard" && (
-            <div className="dashboard-info">
-              <h2>Welcome, {name || "Student"}</h2>
-              <p>College: {college || "Not Selected"}</p>
-              <p>Course: {course || "Not Selected"}</p>
-              <p>Year: {year || "Not Selected"}</p>
-              <p>Semester: {semester || "Not Selected"}</p>
+          <Outlet/>
             </div>
+          {/* {activeSection === "Dashboard" && (
+         
           )}
 
-          {activeSection === "Profile" && (
-            <div className="profile-container">
-              <h2>Edit Your Profile</h2>
 
-              <label>Upload Profile Photo:</label>
-              <input type="file" accept="image/*" onChange={(e) => setProfilePhoto(e.target.files[0])} />
-              {profilePhoto && <p>Photo uploaded: {profilePhoto.name}</p>}
 
-              <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
-              <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} />
-              <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-              <input type="text" placeholder="Student ID" value={studentId} onChange={(e) => setStudentId(e.target.value)} />
-              <input type="text" placeholder="Registration Number" value={regNo} onChange={(e) => setRegNo(e.target.value)} />
+          
 
-              <label>College:</label>
-              <select value={college} onChange={(e) => setCollege(e.target.value)}>
-                <option value="">Select College</option>
-                <option value="College of Agricultural and Environmental Sciences">College of Agricultural and Environmental Sciences(CAES)</option>
-                <option value="College of Business and Management Sciences">College of Business and Management Sciences(COBAMS)</option>
-                <option value="College of Computing and Information Sciences">College of Computing and Information Sciences(COCIS)</option>
-                <option value="College of Education and External Studies">College of Education and External Studies(COEES)</option>
-                <option value="College of Engineering, Design, Art and Technology">College of Engineering, Design, Art and Technology(CEDAT)</option>
-                <option value="College of Health Sciences">College of Health Sciences(COHS)</option>
-                <option value="College of Humanities and Social Sciences">College of Humanities and Social Sciences(CHUSS)</option>
-                <option value="College of Veterinary Medicine, Animal Resources & Bio-security">College of Veterinary Medicine, Animal Resources & Bio-security(COVABS)</option>
-                <option value="The School of Law">The School of Law(SOL)</option>
-              </select>
-
-              <label>Course:</label>
-              <select value={course} onChange={handleCourseChange}>
-                <option value="">Select Course</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="Information System & Technology">Information System & Technology</option>
-                <option value="Software Engineering">Software Engineering</option>
-                <option value="Library & Information Sciences">Library & Information Science</option>
-                <option value="Law">Law</option>
-                <option value="Business Administration">Business Administration</option>
-                <option value="Economics">Economics</option>
-                <option value="Social Work & Social Administration">Social Work & Social Administration</option>
-                <option value="Journalism & Communication">Journalism & Communication</option>  
-                <option value="Agricultural Engineering">Agricultural Engineering</option>
-                <option value="Civil Engineering">Civil Engineering</option>    
-                <option value="Mechanical Engineering">Mechanical Engineering</option>
-                <option value="Electrical Engineering">Electrical Engineering</option>  
-                <option value="Biomedical Engineering">Biomedical Engineering</option>
-                <option value="Veterinary Medicine">Veterinary Medicine</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="Medicine">Medicine</option>
-                <option value="Economics">Economics</option>
-                <option value="History">History</option>
-              </select>
-
-              <label>Year:</label>
-              <select value={year} onChange={(e) => setYear(e.target.value)}>
-                <option value="">Select Year</option>
-                <option value="1">Year 1</option>
-                <option value="2">Year 2</option>
-                <option value="3">Year 3</option>
-                <option value="4">Year 4</option>
-              </select>
-
-              <label>Semester:</label>
-              <select value={semester} onChange={handleSemesterChange}>
-                <option value="">Select Semester</option>
-                <option value="1">Semester 1</option>
-                <option value="2">Semester 2</option>
-              </select>
-
-              <button onClick={() => setProfileSaved(true)}>Save Profile</button>
-              {profileSaved && <p className="success-message">Profile saved successfully!</p>}
-            </div>
-          )}
-
-          {activeSection === "My Course" && (
-            <div className="course-container">
-              <h2>My Course Details</h2>
-              <p>You are currently enrolled in <strong>{course || "a course"}</strong> under the <strong>{college || "selected college"}</strong>.</p>
-              {courseUnits.length > 0 && (
-                <div>
-                  <h3>Course Units:</h3>
-                  <ul>
-                    {courseUnits.map((unit, index) => (
-                      <li key={index}>{unit}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
+          
+      
 
           {activeSection === "Report Issue" && (
             <div className="issue-container">
@@ -292,8 +210,7 @@ const Dashboard = () => {
               <button onClick={() => setActiveSection("Dashboard")}>Cancel</button>
               <button onClick={() => alert("Logged out successfully!")}>Logout</button>
             </div>
-          )}
-        </div>
+          )} */}
       </div>
     </div>
   );
