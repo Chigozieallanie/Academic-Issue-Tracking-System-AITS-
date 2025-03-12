@@ -52,7 +52,7 @@ pre {
   font-size: larger;
 }
 
-button {
+/* button {
   background: #4adf05 !important;
   padding: 5px;
   border-radius: 10px;
@@ -61,7 +61,7 @@ button {
 }
 button:hover {
   background: #f30424;
-}
+} */
 
 
 p1 {

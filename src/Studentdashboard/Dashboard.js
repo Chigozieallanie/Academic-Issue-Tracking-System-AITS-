@@ -103,8 +103,8 @@ const Dashboard = () => {
       <div className="sidebar">
         <h2>STUDENT DASHBOARD</h2>
         <ul>
-          {["dashboard", "profile", "my-Course", "reportIssue", "IssueStatus", "Logout"].map((section) => (
-            <NavLink to={section}>
+          {["dashboard", "profile", "my-Course", "reportIssue", "issueStatus", "Logout"].map((section) => (
+            <NavLink to={section} key={section}>
 
             <li key={section} >
               {section}
@@ -123,94 +123,7 @@ const Dashboard = () => {
         <div className="content">
           <Outlet/>
             </div>
-          {/* {activeSection === "Dashboard" && (
-         
-          )}
-
-
-
           
-
-          
-      
-
-          {activeSection === "Report Issue" && (
-            <div className="issue-container">
-              <h2>Report an Issue</h2>
-
-              <p><strong>Name:</strong> {name}</p>
-              <p><strong>Student ID:</strong> {studentId}</p>
-              <p><strong>Registration Number:</strong> {regNo}</p>
-
-              <label>Select Issue Category:</label>
-              <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option value="">Select Category</option>
-                {issueCategories.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-
-              <label>Select Lecturer:</label>
-              <select value={lecturer} onChange={(e) => setLecturer(e.target.value)}>
-                <option value="">Select Lecturer</option>
-                {lecturers.map((lect) => (
-                  <option key={lect} value={lect}>{lect}</option>
-                ))}
-              </select>
-
-              <label>Select Course Code:</label>
-              <select value={courseCode} onChange={(e) => setCourseCode(e.target.value)}>
-                <option value="">Select Course Code</option>
-                {courseCodes.map((code) => (
-                  <option key={code} value={code}>{code}</option>
-                ))}
-              </select>
-
-              <textarea
-                placeholder="Describe your issue..."
-                value={newIssue}
-                onChange={(e) => setNewIssue(e.target.value)}
-                maxLength={200}
-              />
-
-              <label>Attach Document:</label>
-              <input type="file" onChange={(e) => setDocument(e.target.files[0])} />
-              {document && <p>Document attached: {document.name}</p>}
-
-              <button onClick={handleReportIssue}>Submit Issue</button>
-            </div>
-          )}
-
-          {activeSection === "Issue Status" && (
-            <div className="status-container">
-              <h2>Issue Status</h2>
-              {issues.length === 0 ? (
-                <p>No issues reported yet.</p>
-              ) : (
-                issues.map((issue) => (
-                  <div key={issue.id} className={`issue ${issue.status.toLowerCase()}`}>
-                    <p><strong>Issue #{issue.id}</strong></p>
-                    <p><strong>Category:</strong> {issue.category}</p>
-                    <p><strong>Description:</strong> {issue.description}</p>
-                    <p><strong>Submitted on:</strong> {issue.timestamp}</p>
-                    <p><strong>Status:</strong> {issue.status}</p>
-                    <p><strong>Document:</strong> {issue.documentName}</p>
-                    <p><strong>Lecturer:</strong> {issue.lecturer}</p>
-                    <p><strong>Course Code:</strong> {issue.courseCode}</p>
-                    {issue.status === "Pending" && <button onClick={() => handleResolveIssue(issue.id)}>Mark as Resolved</button>}
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-
-          {activeSection === "Logout" && (
-            <div className="logout-container">
-              <h2>Are you sure you want to logout?</h2>
-              <button onClick={() => setActiveSection("Dashboard")}>Cancel</button>
-              <button onClick={() => alert("Logged out successfully!")}>Logout</button>
-            </div>
-          )} */}
       </div>
     </div>
   );

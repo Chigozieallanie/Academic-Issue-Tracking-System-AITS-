@@ -21,10 +21,10 @@ input {
   border-radius: 5px;
 }
 
-button {
+/* button {
   width: 100%;
   padding: 10px;
-  /* background-color: #28a745; */
+  /* background-color: #28a745;
   color: white;
   border: none;
   border-radius: 5px;
@@ -33,7 +33,8 @@ button {
 
 button:hover {
   background-color: #218838;
-}
+} */
+
 
 .error {
   color: red;
