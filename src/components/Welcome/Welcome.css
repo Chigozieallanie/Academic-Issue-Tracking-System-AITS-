@@ -23,13 +23,15 @@
   padding: 20px;
   background-color: #13d601;
   color: white;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 /* Title (AITS) */
 .head h1 {
   margin: 0;
   font-size: 26px;
-  color: #fff9f9;
+  color: #ffffff;
+  transition: color 0.9s ease, transform 0.3s ease;
 }
 
 /* Button container */
@@ -43,7 +45,7 @@
   padding: 10px 20px;
   border: none;
   background-color: white;
-  color: #007bff;
+  color: #12dd0b;
   font-weight: bold;
   cursor: pointer;
   border-radius: 5px;
@@ -65,8 +67,15 @@
 }
 
 .main-content h2 {
-  font-size: 32px;
+  font-size: 27px;
   margin-bottom: 10px;
+  color: #098a04;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.main-content h2:hover {
+  color: #0b5e02;
+  transform: scale(1.1);
 }
 
 .main-content p {
@@ -80,5 +89,5 @@
   background-color: #000000;
   color: white;
   padding: 15px;
-  font-size: 14px;
+  font-size: 17px;
 }

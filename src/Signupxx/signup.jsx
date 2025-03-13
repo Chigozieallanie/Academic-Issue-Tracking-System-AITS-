@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import "./Appsignup.css";
 import { sendVerificationCode } from "./email"; // Import the email service
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  // State for form inputs
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    confirmPassword: "",
-    verificationCode: "",
+    confirmPassword: ""
   });
 
   const [error, setError] = useState("");
@@ -17,8 +16,8 @@ const Signup = () => {
   const [generatedCode, setGeneratedCode] = useState("");
   const [passwordStrength, setPasswordStrength] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-  // Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -27,11 +26,9 @@ const Signup = () => {
     }
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate inputs
     if (!formData.username || !formData.email || !formData.password) {
       setError("All fields are required.");
       return;
@@ -43,7 +40,9 @@ const Signup = () => {
     }
 
     if (!validatePassword(formData.password)) {
-      setError("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+      setError(
+        "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
+      );
       return;
     }
 
@@ -53,11 +52,7 @@ const Signup = () => {
       sendVerificationCode(formData.email, code);
       setVerificationSent(true);
       alert("Verification code sent to your email.");
-      return;
-    }
-
-    if (formData.verificationCode !== generatedCode) {
-      setError("Invalid verification code.");
+      navigate("/verificationcode");
       return;
     }
 
@@ -65,36 +60,38 @@ const Signup = () => {
     console.log("User data:", formData);
   };
 
-  // Generate a random verification code
   const generateVerificationCode = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
   };
 
-  // Validate password strength
   const validatePassword = (password) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return passwordRegex.test(password);
   };
 
-  // Get password strength
   const getPasswordStrength = (password) => {
     if (password.length < 8) {
       return "Weak";
-    } else if (password.length >= 8 && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(password)) {
+    } else if (
+      password.length >= 8 &&
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(password)
+    ) {
       return "Strong";
     } else {
       return "Medium";
     }
   };
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   return (
-    <div className="signup-container">
-      <h3><b>Makerere University Academic Issue Tracking System</b></h3>
+    <div className="signup-body">
+      <h3>
+        <b>Makerere University Academic Issue Tracking System</b>
+      </h3>
       <h4>Student Sign Up</h4>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
@@ -141,16 +138,6 @@ const Signup = () => {
           onChange={handleChange}
           required
         />
-        {verificationSent && (
-          <input
-            type="text"
-            name="verificationCode"
-            placeholder="Verification Code"
-            value={formData.verificationCode}
-            onChange={handleChange}
-            required
-          />
-        )}
         <button type="submit">Sign Up</button>
       </form>
     </div>

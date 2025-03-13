@@ -11,18 +11,20 @@ import ReportIssue from "./pages/ReportIssue";
 import Issuestatus from "./pages/Issuestatus";
 import Logout from "./pages/Logout";
 import Welcome from "./components/Welcome/Welcome";
+import Verificationcode from "./Signupxx/Verificationcode";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/welcome" element={<Welcome />} />
+        <Route path="/verificationcode" element={<Verificationcode />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<StudentDashboard />}>
           <Route path="profile" element={<Profile />} />
-          <Route path="/reportissue" element={<ReportIssue name="Bwanika" />} />
+          <Route path="/reportissue" element={<ReportIssue name="Allan" />} />
           <Route
             path="my-course"
             element={
