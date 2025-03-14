@@ -2,7 +2,7 @@ body {
   margin: 0;
   font-family: "Poppins", sans-serif;
   background-color: #f4f7f6;
-  color: #131212;
+  color: #5f5a5a;
   line-height: 1.6;
 }
 
@@ -119,7 +119,7 @@ body {
 }
 
 h2 {
-  color: #2c3e50;
+  color: #515551;
   margin-bottom: 20px;
   font-size: 1.8rem;
   font-weight: 600;

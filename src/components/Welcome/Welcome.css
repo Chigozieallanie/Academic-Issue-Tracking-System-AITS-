@@ -15,7 +15,7 @@
 }
 
 /* Header styling */
-.head {
+.welcome-head {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -27,7 +27,7 @@
 }
 
 /* Title (AITS) */
-.head h1 {
+.welcome-head h1 {
   margin: 0;
   font-size: 26px;
   color: #ffffff;
@@ -35,13 +35,13 @@
 }
 
 /* Button container */
-.auth-buttons {
+.welcome-auth-buttons {
   display: flex;
   gap: 10px;
 }
 
 /* Sign-up and login buttons */
-.auth-buttons button {
+.welcome-auth-buttons button {
   padding: 10px 20px;
   border: none;
   background-color: white;
@@ -52,12 +52,12 @@
   transition: 0.3s ease;
 }
 
-.auth-buttons button:hover {
+.welcome-auth-buttons button:hover {
   background-color: #f0f0f0;
 }
 
 /* Main content section */
-.main-content {
+.welcome-main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -66,26 +66,26 @@
   padding: 20px;
 }
 
-.main-content h2 {
+.welcome-text {
   font-size: 27px;
   margin-bottom: 10px;
-  color: #098a04;
+  color: #010002;
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.main-content h2:hover {
+.welcome-main-content h2:hover {
   color: #0b5e02;
   transform: scale(1.1);
 }
 
-.main-content p {
+.welcome-main-content p {
   max-width: 600px;
   font-size: 18px;
   line-height: 1.5;
 }
 
 /* Footer styling */
-.footer {
+.welcome-footer {
   background-color: #000000;
   color: white;
   padding: 15px;
