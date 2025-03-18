@@ -2,7 +2,7 @@
   box-sizing: border-box;
 }
 /*body {
-  background: url(../images/Makerere-Main-Building-8thNov2024.jpg);
+  background-image: url("/public/ss.PNG");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -19,7 +19,6 @@ body::before {
   z-index: -1; /* Places it behind everything */
 }
 .container {
-
   display: flex !important;
   flex-direction: column;
   justify-content: center;
@@ -63,7 +62,6 @@ button:hover {
   background: #f30424;
 } */
 
-
 p1 {
   color: rgb(83, 182, 2);
   text-align: center;
@@ -74,7 +72,7 @@ p1 {
   padding: 5px;
 }
 
-span{
+span {
   color: rgb(0, 95, 236);
   cursor: pointer;
 }
@@ -83,14 +81,19 @@ h1 {
   color: #026b10;
   font-size: 19px;
 }
-h5{
+h5 {
   color: #026b10;
   text-align: center;
 }
 
-
-h6{
+h6 {
   color: #026b10;
   text-align: center;
   font-size: 14px;
+}
+.login-body {
+  background-image: url("/public/ss.PNG");
+  background-size: cover;
+  opacity: 0.4;
+  height: 100vh;
 }

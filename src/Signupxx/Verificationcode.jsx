@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import "./Verificationcode.css";
 import { useNavigate } from "react-router-dom";
 
-const Verificationcode = ({ handleVerification }) => {
+const Verificationcode = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const handleVerification = () => {};
   const handleChange = (e) => {
     setVerificationCode(e.target.value);
   };

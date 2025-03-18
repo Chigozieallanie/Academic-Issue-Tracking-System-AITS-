@@ -5,6 +5,7 @@
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  content: "";
 }
 
 .signup-body h3 {
@@ -56,7 +57,7 @@
 .signup-body p {
   margin: 5px 0;
   font-size: 14px;
-  color: #666;
+  color: #504c4c;
 }
 
 .signup-body .error {
@@ -76,4 +77,18 @@
 
 .signup-body button[type="submit"]:hover {
   background-color: #27ae60;
+}
+.signup-footer {
+  text-align: center;
+  margin-top: 20px;
+  color: rgb(255, 255, 255);
+}
+.signup-page {
+  background-image: url("/public/mainbuilding.jpg");
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  z-index: -1;
 }

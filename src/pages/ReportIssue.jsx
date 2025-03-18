@@ -14,13 +14,14 @@ function ReportIssue({
   studentId,
   newIssue,
   setNewIssue,
-  setDocument,
+
   handleReportIssue,
   name,
   document
 }) {
   const [description, setDescription] = useState("");
   const [lecturer, setLecturer] = useState("");
+  const [selectedDocument, setSelectedDocument] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -30,6 +31,10 @@ function ReportIssue({
       console.log("Description is valid");
       handleReportIssue();
     }
+  }
+  function handleDocumentChange(e) {
+    const file = e.target.files[0];
+    setSelectedDocument(file);
   }
 
   return (
@@ -94,9 +99,9 @@ function ReportIssue({
         />
 
         <label>Attach Document:</label>
-        <input type="file" onChange={(e) => setDocument(e.target.files[0])} />
-        {document && <p>Document attached: {document.name}</p>}
-        <Button>Submit Issues</Button>
+        <input type="file" onChange={handleDocumentChange} />
+        {selectedDocument && <p>Document attached: {selectedDocument.name}</p>}
+        <Button type="submit">Submit Issues</Button>
       </Form>
     </div>
   );

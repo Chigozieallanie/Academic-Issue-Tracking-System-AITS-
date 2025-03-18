@@ -88,58 +88,64 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup-body">
-      <h3>
-        <b>Makerere University Academic Issue Tracking System</b>
-      </h3>
-      <h4>Student Sign Up</h4>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <div className="password-container">
+    <div className="signup-page">
+      <div className="signup-body">
+        <h3>
+          <b>Makerere University Academic Issue Tracking System</b>
+        </h3>
+        <h4>Student Sign Up</h4>
+        {error && <p className="error">{error}</p>}
+        <form onSubmit={handleSubmit}>
           <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            placeholder="Password"
-            value={formData.password}
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
             onChange={handleChange}
             required
           />
-        </div>
-        <label>
           <input
-            type="checkbox"
-            checked={showPassword}
-            onChange={togglePasswordVisibility}
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
           />
-          Show Password
-        </label>
-        <p>Password Strength: {passwordStrength}</p>
-        <input
-          type={showPassword ? "text" : "password"}
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Sign Up</button>
-      </form>
+          <div className="password-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <label>
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={togglePasswordVisibility}
+            />
+            Show Password
+          </label>
+          <p>Password Strength: {passwordStrength}</p>
+          <input
+            type={showPassword ? "text" : "password"}
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Sign Up</button>
+          <footer className="signup-footer">
+            <p>© {new Date().getFullYear()} MAK-AITS. All rights reserved.</p>
+            <p>Empowering students through seamless issue resolution</p>
+          </footer>
+        </form>
+      </div>
     </div>
   );
 };
