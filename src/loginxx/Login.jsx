@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./App.css";
+import "./login.css";
 import { Link } from "react-router-dom";
 
 function Login() {
@@ -113,6 +113,10 @@ function Login() {
                     <b>Signup</b>
                   </h6>
                 </Link>
+                <p>
+                  © {new Date().getFullYear()} MAK-AITS. All rights reserved.
+                </p>
+                <p>Empowering students through seamless issue resolution</p>
               </div>
             </div>
           </form>
