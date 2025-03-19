@@ -278,3 +278,26 @@ button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(26, 188, 156, 0.3);
 }
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.image-preview {
+  margin-bottom: 10px;
+}
+
+.image-preview img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}

@@ -1,44 +1,54 @@
-import Button from "../components/ui/Button"
+import React, { useState } from "react";
+import Button from "../components/ui/Button";
 
-function Profile(){
+function Profile() {
+  const [selectedImage, setSelectedImage] = useState(null);
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(URL.createObjectURL(file));
+    }
+  };
 
-    return <div className="profile-container">
-    <h2>Edit Your Profile</h2>
+  return (
+    <div className="profile-container">
+      <h2>Edit Your Profile</h2>
 
-    <label>Upload Profile Photo:</label>
-    <input type="file" accept="image/*" />
+      <div className="image-upload">
+        {selectedImage && (
+          <div className="image-preview">
+            <img src={selectedImage} alt="Profile Preview" />
+          </div>
+        )}
+        <input type="file" accept="image/*" onChange={handleImageChange} />
+      </div>
 
+      <input type="text" placeholder="Full Name " />
 
-    <input type="text" placeholder="Full Name "  />
- 
-    <label>College:</label>
-    <select >
-      <option value="">Select College</option>
+      <label>College:</label>
+      <select>
+        <option value="">Select College</option>
+      </select>
 
-    </select>
+      <label>Course:</label>
+      <select>
+        <option value="">Select Course</option>
+      </select>
 
-    <label>Course:</label>
-    <select >
-      <option value="">Select Course</option>
-     
-    </select>
+      <label>Year:</label>
+      <select></select>
 
-    <label>Year:</label>
-    <select>
-  
-    </select>
+      <label>Semester:</label>
+      <select>
+        <option value="">Select Semester</option>
+      </select>
 
-    <label>Semester:</label>
-    <select >
-      <option value="">Select Semester</option>
+      <Button type="save">Save profile</Button>
 
-    </select>
-
-  <Button type="save">Save profile </Button>
-  
-    {<p className="success-message">Profile saved successfully!</p>}
-  </div>
+      {<p className="success-message">Profile saved successfully!</p>}
+    </div>
+  );
 }
 
-export default Profile
+export default Profile;

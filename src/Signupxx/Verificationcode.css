@@ -45,8 +45,8 @@
   margin-bottom: 15px;
 }
 .verification-body {
-  background-image: url("/public/ctf11.jpeg");
+  background-image: url("/public/cct.jpg");
   background-size: cover;
-  opacity: 0.8;
+  opacity: 0.6;
   height: 100vh;
 }
