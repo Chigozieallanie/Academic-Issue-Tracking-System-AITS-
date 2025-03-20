@@ -3,6 +3,11 @@ import "./Dashboard.css";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
 import { IoMdNotificationsOutline } from "react-icons/io";
+import { CgProfile } from "react-icons/cg";
+import { MdDashboard } from "react-icons/md";
+import { FaAddressBook } from "react-icons/fa";
+import { SiStatuspage } from "react-icons/si";
+import { GoIssueOpened } from "react-icons/go";
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [name, setName] = useState("");
@@ -114,11 +119,11 @@ const Dashboard = () => {
         <h2>STUDENT DASHBOARD</h2>
         <ul>
           {[
-            { path: "dashboard", icon: <CiLogout /> },
-            { path: "profile", icon: <CiLogout /> },
-            { path: "my-Course", icon: <CiLogout /> },
-            { path: "reportIssue", icon: <CiLogout /> },
-            { path: "issueStatus", icon: <CiLogout /> },
+            { path: "dashboard", icon: <MdDashboard /> },
+            { path: "profile", icon: <CgProfile /> },
+            { path: "my-Course", icon: <FaAddressBook /> },
+            { path: "reportIssue", icon: <GoIssueOpened /> },
+            { path: "issueStatus", icon: <SiStatuspage /> },
             { path: "notification", icon: <IoMdNotificationsOutline /> },
             { path: "Logout", icon: <CiLogout /> }
           ].map((section) => (
