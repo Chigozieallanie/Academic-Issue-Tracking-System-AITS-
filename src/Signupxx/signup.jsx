@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Appsignup.css";
-import { sendVerificationCode } from "./email"; // Import the email service
+import { sendVerificationCode } from "./email";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -88,7 +88,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup-page">
+    <div className="signup-page opacity-half">
       <div className="signup-body">
         <h3>
           <b>Makerere University Academic Issue Tracking System</b>

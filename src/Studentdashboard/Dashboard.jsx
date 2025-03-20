@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./Dashboard.css";
 import { Link, NavLink, Outlet } from "react-router-dom";
-
+import { CiLogout } from "react-icons/ci";
+import { IoMdNotificationsOutline } from "react-icons/io";
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [name, setName] = useState("");
@@ -23,26 +24,36 @@ const Dashboard = () => {
   const [courseCode, setCourseCode] = useState("");
   const [courseUnits, setCourseUnits] = useState([]);
 
-  const issueCategories = ["Academic", "Administrative", "Technical", "Financial", "Other"];
+  const issueCategories = [
+    "Academic",
+    "Administrative",
+    "Technical",
+    "Financial",
+    "Other"
+  ];
   const lecturers = ["Lecturer A", "Lecturer B", "Lecturer C"];
   const courseCodes = ["CS101", "CS102", "CS103"];
 
   const courses = {
     "Computer Science": {
-      "1": ["Introduction to Programming", "Data Structures", "Discrete Mathematics"],
-      "2": ["Algorithms", "Operating Systems", "Database Systems"]
+      1: [
+        "Introduction to Programming",
+        "Data Structures",
+        "Discrete Mathematics"
+      ],
+      2: ["Algorithms", "Operating Systems", "Database Systems"]
     },
-    "Medicine": {
-      "1": ["Anatomy", "Physiology", "Biochemistry"],
-      "2": ["Pathology", "Pharmacology", "Microbiology"]
+    Medicine: {
+      1: ["Anatomy", "Physiology", "Biochemistry"],
+      2: ["Pathology", "Pharmacology", "Microbiology"]
     },
-    "Economics": {
-      "1": ["Microeconomics", "Macroeconomics", "Statistics"],
-      "2": ["Econometrics", "Development Economics", "Public Finance"]
+    Economics: {
+      1: ["Microeconomics", "Macroeconomics", "Statistics"],
+      2: ["Econometrics", "Development Economics", "Public Finance"]
     },
-    "History": {
-      "1": ["Ancient History", "Medieval History", "Modern History"],
-      "2": ["African History", "Asian History", "European History"]
+    History: {
+      1: ["Ancient History", "Medieval History", "Modern History"],
+      2: ["African History", "Asian History", "European History"]
     }
   };
 
@@ -64,7 +75,7 @@ const Dashboard = () => {
       status: "Pending",
       documentName: document ? document.name : "No document attached",
       lecturer: lecturer,
-      courseCode: courseCode,
+      courseCode: courseCode
     };
 
     setIssues([...issues, issueData]);
@@ -97,18 +108,25 @@ const Dashboard = () => {
     setCourseUnits(courses[course][selectedSemester] || []);
   };
 
-
   return (
     <div className="dashboard-container">
       <div className="sidebar">
         <h2>STUDENT DASHBOARD</h2>
         <ul>
-          {["dashboard", "profile", "my-Course", "reportIssue", "issueStatus", "Logout"].map((section) => (
-            <NavLink to={section} key={section}>
-
-            <li key={section} >
-              {section}
-            </li>
+          {[
+            { path: "dashboard", icon: <CiLogout /> },
+            { path: "profile", icon: <CiLogout /> },
+            { path: "my-Course", icon: <CiLogout /> },
+            { path: "reportIssue", icon: <CiLogout /> },
+            { path: "issueStatus", icon: <CiLogout /> },
+            { path: "notification", icon: <IoMdNotificationsOutline /> },
+            { path: "Logout", icon: <CiLogout /> }
+          ].map((section) => (
+            <NavLink to={section.path} key={section.path}>
+              <li key={section.path}>
+                {section.icon}
+                {section.path}
+              </li>
             </NavLink>
           ))}
         </ul>
@@ -121,9 +139,8 @@ const Dashboard = () => {
         </header>
 
         <div className="content">
-          <Outlet/>
-            </div>
-          
+          <Outlet />
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Login from "./loginxx/Login";
 import About from "./loginxx/About";
 import Signup from "./Signupxx/signup";
@@ -12,6 +13,7 @@ import Issuestatus from "./pages/Issuestatus";
 import Logout from "./pages/Logout";
 import Welcome from "./components/Welcome/Welcome";
 import Verificationcode from "./Signupxx/Verificationcode";
+import Notifications from "./pages/Notifications";
 
 function App() {
   return (
@@ -36,6 +38,7 @@ function App() {
             }
           />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/notification" element={<Notifications />} />
           <Route path="/issueStatus" element={<Issuestatus />} />
           <Route path="/Logout" element={<Logout />} />
         </Route>
