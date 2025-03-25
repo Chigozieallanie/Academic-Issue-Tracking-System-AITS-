@@ -94,6 +94,6 @@ h6 {
 .login-body {
   background-image: url("/public/lib.jpg");
   background-size: cover;
-  opacity: 0.5;
+  opacity: 0.9;
   height: 100vh;
 }
