@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.css"; // Import the CSS file for styling
+import "./resolved.css"; // Import the CSS file for styling
 
 const ResolvedComplaints = () => {
   // Sample data for resolved complaints
@@ -9,7 +9,7 @@ const ResolvedComplaints = () => {
       student: "Mary Nakato",
       issue: "Missing Marks",
       resolutionDate: "2025-01-30",
-    }
+    },
     {
       id: "002",
       student: "Aisha Kyomuhendo",
@@ -17,7 +17,6 @@ const ResolvedComplaints = () => {
       resolutionDate: "2025-02-01",
     },
   ];
-
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
@@ -32,6 +31,9 @@ const ResolvedComplaints = () => {
           </li>
           <li>
             <a href="profile.html">⚙️ Profile & Settings</a>
+          </li>
+          <li>
+            <a href="logout.html">🚪 Log Out</a>
           </li>
         </ul>
       </div>

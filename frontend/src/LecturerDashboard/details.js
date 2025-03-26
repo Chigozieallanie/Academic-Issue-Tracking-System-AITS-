@@ -1,27 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complaint Details</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="sidebar">
+import React from "react";
+import "./details.css"; // Import the CSS file for styling
+
+const ComplaintDetails = () => {
+  // Sample data for the complaint
+  const complaint = {
+    student: "John Doe",
+    issue: "Exam grade discrepancy",
+    description: "I believe my exam grade is incorrect, and I need a review.",
+  };
+
+  return (
+    <div className="dashboard-container">
+      {/* Sidebar */}
+      <div className="sidebar">
         <h2>Lecturer Dashboard</h2>
         <ul>
-            <li><a href="complaints.html">📄 Assigned Complaints</a></li>
-            <li><a href="resolved.html">📊 Resolved Complaints</a></li>
-            <li><a href="profile.html">⚙️ Profile & Settings</a></li>
+          <li>
+            <a href="complaints.html">📄 Assigned Complaints</a>
+          </li>
+          <li>
+            <a href="resolved.html">📊 Resolved Complaints</a>
+          </li>
+          <li>
+            <a href="profile.html">⚙️ Profile & Settings</a>
+          </li>
+          <li>
+            <a href="logout.html">🚪 Log Out</a>
+          </li>
         </ul>
-    </div>
+      </div>
 
-    <div class="main-content">
+      {/* Main Content */}
+      <div className="main-content">
         <h1>Complaint Details</h1>
-        <p><strong>Student:</strong> John Doe</p>
-        <p><strong>Issue:</strong> Exam grade discrepancy</p>
-        <p><strong>Description:</strong> I believe my exam grade is incorrect, and I need a review.</p>
+        <p>
+          <strong>Student:</strong> {complaint.student}
+        </p>
+        <p>
+          <strong>Issue:</strong> {complaint.issue}
+        </p>
+        <p>
+          <strong>Description:</strong> {complaint.description}
+        </p>
         <a href="respond.html">✏️ Respond</a>
+      </div>
     </div>
-</body>
-</html>
+  );
+};
+
+export default ComplaintDetails;
