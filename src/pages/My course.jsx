@@ -1,4 +1,18 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { BACKEND_URL } from "../constants";
+
 function MyCourse({ college, course, courseUnits }) {
+  const [issues, setIssues] = useState([]);
+
+  // useEffect(() => {
+  //   axios.get(`${BACKEND_URL}/issuesxxx`).then((response) => {
+  //     setIssues(response.data);
+  //   }).catch((error) => {
+  //     console.error("Failed", error);
+  //   });
+  // }, []);
+
   return (
     <div className="my-course">
       <h2>My Course Details</h2>
