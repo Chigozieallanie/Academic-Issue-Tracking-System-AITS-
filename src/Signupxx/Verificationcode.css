@@ -47,6 +47,6 @@
 .verification-body {
   background-image: url("/public/cct.jpg");
   background-size: cover;
-  opacity: 0.6;
+  opacity: 0.9;
   height: 100vh;
 }

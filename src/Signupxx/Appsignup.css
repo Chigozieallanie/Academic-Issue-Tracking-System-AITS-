@@ -94,3 +94,26 @@
   position: relative;
   opacity: 1;
 }
+
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #888;
+  font-size: 18px;
+}
+
+.password-toggle:hover {
+  color: #333;
+}

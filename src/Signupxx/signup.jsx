@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Appsignup.css";
 import { sendVerificationCode } from "./email";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import Font Awesome icons
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -121,15 +122,13 @@ const Signup = () => {
               onChange={handleChange}
               required
             />
+            <span
+              className="password-toggle"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
           </div>
-          <label>
-            <input
-              type="checkbox"
-              checked={showPassword}
-              onChange={togglePasswordVisibility}
-            />
-            Show Password
-          </label>
           <p>Password Strength: {passwordStrength}</p>
           <input
             type={showPassword ? "text" : "password"}

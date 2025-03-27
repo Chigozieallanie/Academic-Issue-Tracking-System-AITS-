@@ -18,7 +18,7 @@ const Verificationcode = () => {
       return;
     }
     handleVerification(verificationCode);
-    navigate("/login"); // Navigate to the login page after verification
+    navigate("/login");
   };
 
   return (
