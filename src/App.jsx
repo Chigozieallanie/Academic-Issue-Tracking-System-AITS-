@@ -14,11 +14,18 @@ import Logout from "./pages/Logout";
 import Welcome from "./components/Welcome/Welcome";
 import Verificationcode from "./Signupxx/Verificationcode";
 import Notifications from "./pages/Notifications";
+import RegistraSignup from "./Registra/Registra signup";
+import RegistraLogin from "./Registra/Registralogin";
+import Registradashboard from "./Registra/Registra pages/Registradashboard";
+
 
 function App() {
   return (
     <Router>
       <Routes>
+      <Route path="/registra signup" element={<RegistraSignup />} />
+      <Route path="/registralogin" element={<RegistraLogin />} />
+      <Route path="/registradashboard" element={<Registradashboard />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/verificationcode" element={<Verificationcode />} />
         <Route path="/login" element={<Login />} />
@@ -41,6 +48,7 @@ function App() {
           <Route path="/notification" element={<Notifications />} />
           <Route path="/issueStatus" element={<Issuestatus />} />
           <Route path="/Logout" element={<Logout />} />
+          
         </Route>
       </Routes>
     </Router>
