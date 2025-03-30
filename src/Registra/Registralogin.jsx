@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import './Registra login.css';
 
 const RegistraLogin = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
-        idNumber: '' // Add ID number field
+        idNumber: '' 
     });
 
     const navigate = useNavigate(); 
@@ -61,6 +61,7 @@ const RegistraLogin = () => {
                     />
                 </div>
                 <button type="submit">Log In</button>
+                <p>© {new Date().getFullYear()} MAK-AITS. All rights reserved</p>
             </form>
         </div>
     );

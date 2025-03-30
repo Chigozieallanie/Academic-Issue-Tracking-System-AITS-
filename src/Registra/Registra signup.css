@@ -1,11 +1,20 @@
+
+
 .registra-signup-container {
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: rgba(255, 255, 255, 0.9); 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+   
+    height: 90vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    opacity: 1;
 }
 
 .registra-signup-container h2 {

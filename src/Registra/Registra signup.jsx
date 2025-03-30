@@ -7,7 +7,7 @@ const RegistraSignup = () => {
         name: '',
         email: '',
         password: '',
-        idNumber: '' // Added ID number field
+        idNumber: '' 
     });
     const [verificationCode, setVerificationCode] = useState('');
     const [isCodeSent, setIsCodeSent] = useState(false);
@@ -29,7 +29,7 @@ const RegistraSignup = () => {
         e.preventDefault();
         if (verificationCode === '123456') {
             alert('Signup successful!');
-            navigate('/Registralogin'); // Use the correct absolute path
+            navigate('/Registralogin'); 
         } else {
             alert('Invalid verification code.');
         }
@@ -85,6 +85,7 @@ const RegistraSignup = () => {
                         />
                     </div>
                     <button type="submit">Sign Up</button>
+                        <p>© {new Date().getFullYear()} MAK-AITS. All rights reserved</p>
                 </form>
             ) : (
                 <form onSubmit={handleVerification}>
