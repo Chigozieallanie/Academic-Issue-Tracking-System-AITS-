@@ -30,6 +30,8 @@ const Registradashboard = () => {
                     <li><a href="#logout">Log Out</a></li>
                 </ul>
             </aside>
+            
+
             <main className="registra-dashboard-main">
                 <section id="dashboard" className="registra-dashboard-section">
                     <h2>Dashboard Section</h2>
@@ -53,6 +55,9 @@ const Registradashboard = () => {
                         </div>
                     </div>
                 </section>
+
+
+
 
 
                 <section id="profile" className="registra-dashboard-section">
@@ -84,6 +89,7 @@ const Registradashboard = () => {
                         <button type="submit">Save Profile</button>
                     </form>
                 </section>
+
 
 
                 <section id="performance" className="registra-dashboard-section">
@@ -118,6 +124,9 @@ const Registradashboard = () => {
                 </section>
 
 
+
+
+
                 <section id="issues" className="registra-dashboard-section">
                     <h2>Identify Recurring Issues</h2>
                     <p>Track and identify recurring issues in the system.</p>
@@ -150,6 +159,9 @@ const Registradashboard = () => {
                 </section>
 
 
+
+
+
                 <section id="escalated" className="registra-dashboard-section">
                     <h2>Oversee Escalated Issues</h2>
                     <p>Manage and resolve escalated issues here.</p>
@@ -164,21 +176,21 @@ const Registradashboard = () => {
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Database Connection Failure</td>
+                                <td>Missing Exam Marks</td>
                                 <td>High</td>
-                                <td>IT Support</td>
+                                <td>Mr.A</td>
                                 <td>In Progress</td>
                             </tr>
                             <tr>
-                                <td>Unauthorized Access Attempt</td>
+                                <td>Missing Course work Marks</td>
                                 <td>Critical</td>
-                                <td>Security Team</td>
+                                <td>Mrs.B</td>
                                 <td>Pending</td>
                             </tr>
                             <tr>
-                                <td>Grade Submission Delay</td>
+                                <td>Can't enroll into the course unit</td>
                                 <td>Medium</td>
-                                <td>Academic Office</td>
+                                <td>Miss.c</td>
                                 <td>Resolved</td>
                             </tr>
                         </tbody>
@@ -186,21 +198,31 @@ const Registradashboard = () => {
                 </section>
 
 
+
+
+
                 <section id="communication" className="registra-dashboard-section">
                     <h2>Communication</h2>
-                    <p>Send messages or announcements to students and lecturers.</p>
+                    <p>Send messages or announcements to the lecturer.</p>
                     <form className="communication-form">
                         <label htmlFor="recipient">Recipient:</label>
                         <select id="recipient" name="recipient">
-                            <option value="students">Students</option>
-                            <option value="lecturers">Lecturers</option>
+                            <option value="Mr.A">Mr.A</option>
+                            <option value="Mrs.B">Mrs.B</option>
+                            <option value="Miss.C">Miss.C</option>
                         </select>
 
                         <label htmlFor="message">Message:</label>
                         <textarea id="message" name="message" rows="4" placeholder="Type your message here..."></textarea>
-                        <button type="submit">Send</button>
+                        <button type="submit" className="send-button">Send</button>
                     </form>
                 </section>
+
+
+
+
+
+
 
                 <section id="logout" className="registra-dashboard-section">
                     <h2>Log Out</h2>
@@ -212,6 +234,9 @@ const Registradashboard = () => {
                         <button onClick={() => alert('Log out canceled.')}>Cancel & stay logged in</button>
                     </div>
                 </section>
+
+
+
                 
                 <p>© {new Date().getFullYear()} MAK-AITS. All rights reserved</p>
             </main>

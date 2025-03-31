@@ -87,7 +87,7 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
-  z-index: 1; /* Fixed the invalid declaration */
+  z-index: 1; 
 }
 
 .welcome-text {

@@ -1,18 +1,14 @@
-
-
 .registra-signup-container {
+    background-color: white; /* Explicitly set the container's background to white */
+    color: black; /* Ensure text is visible on a white background */
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.9); 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-   
-    height: 90vh;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    min-height: 90vh;
+    height: auto;
     position: relative;
     opacity: 1;
 }
@@ -43,15 +39,29 @@
 }
 
 .registra-signup-container .form-group input:focus {
-    border-color: #007bff;
+    border-color: #64dd13;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.password-container {
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password-icon {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.toggle-password-icon:hover {
+    color: #000;
 }
 
 .registra-signup-container button {
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #0bca34;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -60,10 +70,18 @@
 }
 
 .registra-signup-container button:hover {
-    background-color: #0056b3;
+    background-color: #f80828;
 }
 
 .registra-signup-container button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+.body-registra-signup {
+    background: linear-gradient(to bottom, #ff5733, #33ff57); 
+    color: white; 
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }

@@ -26,6 +26,12 @@ function Profile() {
 
       <input type="text" placeholder="Full Name " />
 
+      <label>Student ID:</label>
+      <input type="text" placeholder="Enter Student ID" />
+
+      <label>Registration Number:</label>
+      <input type="text" placeholder="Enter Registration Number" />
+
       <label>College:</label>
       <select>
         <option value="">Select College</option>

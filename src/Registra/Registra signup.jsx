@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import './Registra signup.css';
 
@@ -11,11 +11,23 @@ const RegistraSignup = () => {
     });
     const [verificationCode, setVerificationCode] = useState('');
     const [isCodeSent, setIsCodeSent] = useState(false);
+    const [showPassword, setShowPassword] = useState(false); // New state for toggling password visibility
     const navigate = useNavigate(); 
+
+    useEffect(() => {
+        document.body.classList.add('body-registra-signup');
+        return () => {
+            document.body.classList.remove('body-registra-signup');
+        };
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     const handleSubmit = (e) => {
@@ -64,14 +76,23 @@ const RegistraSignup = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
+                        <div className="password-container">
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                id="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                            <span
+                                onClick={togglePasswordVisibility}
+                                className="toggle-password-icon"
+                                style={{ cursor: 'pointer', marginLeft: '10px' }}
+                            >
+                                {showPassword ? '👁️' : '👁️‍🗨️'}
+                            </span>
+                        </div>
                     </div>
                     <div className="form-group">
                         <label htmlFor="idNumber">ID Number:</label>
@@ -99,7 +120,11 @@ const RegistraSignup = () => {
                             required
                         />
                     </div>
+                    
                     <button type="submit">Verify</button>
+
+                    <p>© {new Date().getFullYear()} MAK-AITS. All rights reserved.</p>
+            <p>Empowering Students Through Seamless Issue Resolution</p>
                 </form>
             )}
         </div>
