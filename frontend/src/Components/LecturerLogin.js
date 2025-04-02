@@ -1,7 +1,7 @@
 import React from "react";
-import "./App.css";
+import "./LecturerLogin.css";
 
-function App() {
+function LecturerLogin() {
   return (
     <div className="login-container">
       <header className="header">
@@ -32,4 +32,4 @@ function App() {
   );
 }
 
-export default App;
+export default LecturerLogin;
