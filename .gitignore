@@ -18,3 +18,4 @@ __pycache__/
 
 # Ignore virtual environment
 aits_env/
+node_modules/
