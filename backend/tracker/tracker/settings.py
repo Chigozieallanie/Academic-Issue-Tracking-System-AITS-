@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'axes',
     'django_otp',
     'django_otp.plugins.otp_totp',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +59,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+APPEND_SLASH=False
 
 ROOT_URLCONF = 'tracker.urls'
 
@@ -137,6 +146,7 @@ AUTH_USER_MODEL = 'issues.CustomUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
@@ -146,12 +156,17 @@ REST_FRAMEWORK = {
     ]
 }
 
-AUTHENTICATION_BACKENDS = [
-    # 'axes.backends.AxesModelBackend',
-    'django.contrib.auth.backends.ModelBackend',
-    'axes.backends.AxesStandaloneBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
-]
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_SIGNUP_FIELDS=['username*', 'email*', 'password1*', 'password2*']
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+# JWT Settings
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

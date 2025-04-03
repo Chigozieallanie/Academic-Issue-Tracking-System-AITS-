@@ -1,13 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Issue(models.Model):
-    title = models.CharField(max_length=200)
+    CATEGORY_CHOICES = [
+        ('academic', 'Academic'),
+        ('administrative', 'Administrative'),
+        ('technical', 'Technical'),
+        ('other', 'Other'),
+    ]
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='academic')
+    lecturer = models.CharField(max_length=50)
+    coursecode = models.CharField(max_length=20)
     description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    reporter = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='reported_issues')
-    assigned_to = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='assigned_issues', blank=True, null=True)
+    document = models.FileField(upload_to='issue_documents/', blank=True, null=True)
+    
+            
     def __str__(self):
         return self.title
 
@@ -15,34 +23,51 @@ class CustomUser(AbstractUser):
     STUDENT = 'student'
     LECTURER = 'lecturer'
     REGISTRAR = 'registrar'
+    
     USER_ROLE_CHOICES = [
         (STUDENT, 'Student'),
         (LECTURER, 'Lecturer'),
         (REGISTRAR, 'Academic Registrar'),
     ]
+    
     role = models.CharField(max_length=10, choices=USER_ROLE_CHOICES, default=STUDENT)
     email_verified = models.BooleanField(default=False)
+    requires_profile_setup = models.BooleanField(default=True)
+    
     def __str__(self):
-                return self.username
+        return self.username
 
 class Student(models.Model):
-    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='student_profile')
     student_id = models.CharField(max_length=20, unique=True)
     program = models.CharField(max_length=100)
-    year_of_study = models.IntegerField()
+    year_of_study = models.IntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5)
+        ]
+    )
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.student_id}"
 
 class Lecturer(models.Model):
-    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='lecturer_profile')
     staff_id = models.CharField(max_length=20, unique=True)
     department = models.CharField(max_length=100)
     specialization = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.staff_id}"
 
 class AcademicRegistrar(models.Model):
-        user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
-        office = models.CharField(max_length=100)
-        contact_info = models.CharField(max_length=100)
-        managed_students = models.ManyToManyField('Student', related_name='registrars')
-
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='registrar_profile')
+    office = models.CharField(max_length=100)
+    contact_info = models.CharField(max_length=100)
+    managed_students = models.ManyToManyField(Student, related_name='registrars', blank=True)
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.office}"
 class Course(models.Model):
         title = models.CharField(max_length=200)
         lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE)
