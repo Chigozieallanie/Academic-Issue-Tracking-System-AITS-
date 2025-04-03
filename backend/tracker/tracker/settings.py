@@ -177,3 +177,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 if 'RENDER' in os.environ:
     DATABASES['default']['NAME'] = '/var/lib/render/db.sqlite3'
+    DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
