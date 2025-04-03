@@ -3,6 +3,8 @@ services:
     name: your-backend-service-name
     runtime: python
     buildCommand: |
+      pip install poetry
+      poetry install --no-root
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
     startCommand: |
