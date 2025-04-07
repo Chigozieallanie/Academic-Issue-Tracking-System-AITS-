@@ -1,0 +1,75 @@
+.notifications-page {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.notifications-page h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #2c3e50;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.notifications-page ul {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  max-width: 600px;
+}
+
+.notification-item {
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notification-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.notification-message {
+  font-size: 18px;
+  color: #34495e;
+  margin: 0;
+  font-weight: 500;
+}
+
+.notification-timestamp {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-top: 10px;
+  text-align: right;
+  font-style: italic;
+}
+
+.notification-item:not(:last-child) {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.notification-item {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
