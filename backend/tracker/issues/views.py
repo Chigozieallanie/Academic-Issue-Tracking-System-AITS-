@@ -1,15 +1,21 @@
+from tokenize import Token
 from rest_framework import generics, status, viewsets
-from .models import Issue, Student, CustomUser
+from .models import Issue, StudentProfile as Student, CustomUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import IssueSerializer
+from django.contrib.auth import authenticate
 # from .permissions import IsOwnerOrReadOnly, IsRole
 from rest_framework import status, permissions
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserProfileSerializer
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken # type: ignore
 from django.contrib.auth import authenticate, login, logout
-from .models import Student, Lecturer, AcademicRegistrar
+from .models import StudentProfile, LecturerProfile, RegistrarProfile
 from .serializers import (
     UserRegistrationSerializer,
     StudentProfileSerializer,
@@ -83,59 +89,31 @@ class UserRegistrationView(APIView):
     
 
 class UserLoginView(APIView):
-    permission_classes = []  # Allow unauthenticated access
-    
-    def get(self, request):
-        """Provide login endpoint information"""
-        return Response({
-            "message": "Send POST request with credentials to login",
-            "required_fields": {
-                "username": "string",
-                "password": "string"
-            },
-            "success_response": {
-                "refresh": "JWT refresh token",
-                "access": "JWT access token",
-                "user": {
-                    "id": "integer",
-                    "username": "string",
-                    "email": "string",
-                    "role": "string"
-                }
-            }
-        })
-    
+    serializer_class = UserLoginSerializer
+    permission_classes = []
+
     def post(self, request):
-        """Handle user login"""
-        serializer = UserLoginSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response({
-                "status": "error",
-                "errors": serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
+        # Validate the incoming data
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
         
-        username = serializer.validated_data['username']
-        password = serializer.validated_data['password']
-        user = authenticate(username=username, password=password)
+        # Get the validated user from the serializer
+        user = serializer.validated_data['user']
         
-        if not user:
-            return Response({
-                "status": "error",
-                "message": "Invalid credentials"
-            }, status=status.HTTP_401_UNAUTHORIZED)
-        
+        # Create the JWT token
         refresh = RefreshToken.for_user(user)
+        
+        # Access and refresh tokens
+        access_token = str(refresh.access_token)
+        refresh_token = str(refresh)
+        
         return Response({
-            "status": "success",
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-            "user": {
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-                "role": user.role
-            }
-        })
+            'access_token': access_token,
+            'refresh_token': refresh_token,
+            'user_id': user.pk,
+            'username': user.username,
+            'role': user.role
+        }, status=status.HTTP_200_OK)
 
 class UserLogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -146,3 +124,12 @@ class UserLogoutView(APIView):
             {'message': 'Successfully logged out'},
             status=status.HTTP_200_OK
         )
+        
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data)
