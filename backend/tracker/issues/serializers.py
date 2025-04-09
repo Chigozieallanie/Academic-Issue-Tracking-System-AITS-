@@ -125,11 +125,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
         # Step 3: Create profile
         if role == CustomUser.STUDENT:
-            Student.objects.create(user=user, **profile_data)
+            StudentProfile.objects.create(user=user, **profile_data)
         elif role == CustomUser.LECTURER:
-            Lecturer.objects.create(user=user, **profile_data)
+            LecturerProfile.objects.create(user=user, **profile_data)
         elif role == CustomUser.REGISTRAR:
-            AcademicRegistrar.objects.create(user=user, **profile_data)
+            RegistrarProfile.objects.create(user=user, **profile_data)
 
         # Step 4: Generate token (optional)
         Token.objects.create(user=user)

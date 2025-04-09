@@ -86,7 +86,7 @@
 }
 .signup-page {
   background-image: url("/public/mainbuilding.jpg");
-  height: 100vh;
+  height: 200vh;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -131,4 +131,9 @@
 
 .error-message {
   white-space: pre-line; /* To show multiple line errors */
+}
+.password-input {
+  display: flex;
+  align-items: center;
+  position: relative;
 }
