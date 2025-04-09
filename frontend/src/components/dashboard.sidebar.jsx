@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { BarChart, CheckSquare, ClipboardList, HelpCircle, Home, LogOut, Settings, User } from "lucide-react"
+import'./global.css';
 
 import {
   Sidebar,

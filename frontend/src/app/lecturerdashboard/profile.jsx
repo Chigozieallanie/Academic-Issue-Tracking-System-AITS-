@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
+import'./global.css';
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false)
