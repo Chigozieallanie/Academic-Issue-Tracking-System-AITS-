@@ -30,7 +30,7 @@ export function DashboardSidebar({ children }) {
         <Sidebar className="bg-black text-white">
           <SidebarHeader className="border-b border-white/10 px-6 py-3 bg-primary">
             <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
-              <span className="text-white text-xl">AcadTrack</span>
+              <span className="text-white text-xl">@MAK-AITS 2025</span>
             </Link>
           </SidebarHeader>
           <SidebarContent>
