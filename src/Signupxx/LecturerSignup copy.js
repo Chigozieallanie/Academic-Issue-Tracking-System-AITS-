@@ -1,4 +1,4 @@
-import React from "react";//Import React modules.
+import React from "react";//Import the react library
 import "./LecturerSignup.css"; // Import CSS file
 
 const LecturerSignup = () => {
