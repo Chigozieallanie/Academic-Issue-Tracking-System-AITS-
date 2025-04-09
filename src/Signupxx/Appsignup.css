@@ -117,18 +117,3 @@
 .password-toggle:hover {
   color: #333;
 }
-
-
-.role-fields {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-}
-
-.role-fields .form-group {
-  margin-bottom: 15px;
-}
-
-.error-message {
-  white-space: pre-line; /* To show multiple line errors */
-}
