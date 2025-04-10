@@ -61,12 +61,16 @@ MIDDLEWARE = [
     'axes.middleware.AxesMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 
 # CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_CREDENTIALS = True
+
+ALLOWED_HOSTS = ['Academic-Issue-Tracking-System-AITS-.onrender.com', 'localhost']  # Add your Render URL
+CSRF_TRUSTED_ORIGINS = ['https://Academic-Issue-Tracking-System-AITS-.onrender.com']  # Required for HTTPS
 
 APPEND_SLASH=False
 
@@ -144,6 +148,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
