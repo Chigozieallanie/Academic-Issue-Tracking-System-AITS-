@@ -1,20 +1,18 @@
 services:
   - type: web
-    name: your-backend-service-name
+    name: academic-issue-tracking-system-aits-
     runtime: python
     buildCommand: |
-      pip install poetry
-      poetry install --no-root
+      pip install --upgrade pip
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
     startCommand: |
-      mkdir -p /var/lib/render &&
-      python manage.py migrate &&
+      python manage.py migrate
       gunicorn tracker.wsgi:application
     envVars:
       - key: SECRET_KEY
         generateValue: true
       - key: DISABLE_COLLECTSTATIC
-        value: 1
+        value: 0  # Enable Whitenoise
       - key: RENDER
         value: true
