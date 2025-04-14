@@ -16,8 +16,7 @@ import Verificationcode from "./Signupxx/Verificationcode";
 import Notifications from "./pages/Notifications";
 import RegistraSignup from "./Registra/Registra signup";
 import RegistraLogin from "./Registra/Registralogin";
-import Registradashboard from "./Registra/Registra pages/Registradashboard";
-
+import Registradashboard from "./Registra/Registra pages/Registradashboard"; 
 
 function App() {
   return (
