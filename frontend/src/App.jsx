@@ -18,6 +18,7 @@ import RegistraSignup from "./Registra/Registra signup";
 import RegistraLogin from "./Registra/Registralogin";
 import Registradashboard from "./Registra/Registra pages/Registradashboard";
 
+
 function App() {
   return (
     <Router>
