@@ -25,7 +25,7 @@ function Login() {
       setIsSubmitting(true);
       // Simulate login API call
       setTimeout(() => {
-        navigate("/dashboard");
+        navigate("/studentdashboard"); // Redirect to Student Dashboard
       }, 1000);
     }
   };
