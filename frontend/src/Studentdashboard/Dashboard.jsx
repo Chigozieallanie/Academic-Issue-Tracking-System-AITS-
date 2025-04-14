@@ -151,4 +151,4 @@ const Dashboard = () => {
   );
 };
 
-export default StudentDashboard;
+export default Dashboard;
