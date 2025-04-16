@@ -23,6 +23,7 @@ from .serializers import (
     RegistrarProfileSerializer,
     UserLoginSerializer
 )
+from rest_framework.pagination import PageNumberPagination
 
 
 User = get_user_model()
@@ -32,6 +33,7 @@ class StudentProfileViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentProfileSerializer
     permission_classes = [AllowAny] #[IsOwnerOrReadOnly | IsRole(['registrar'])]
+    permission_classes = [IsRole(['registrar'])]
 
     def perform_create(self, serializer):
         if self.request.user.role == 'registrar':
@@ -42,7 +44,8 @@ class StudentProfileViewSet(viewsets.ModelViewSet):
 class IssueListCreateView(generics.ListCreateAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
-    permission_classes = [AllowAny]  # This allows unauthenticated access
+    permission_classes = [IsAuthenticated]  
+    pagination_class = PageNumberPagination
 
 
 class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
@@ -72,8 +75,10 @@ class UserRegistrationView(APIView):
         """Handle user registration"""
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
-            return Response({
+            try:
+                user = serializer.save()
+            except Exception as e:
+                 return Response({
                 "status": "success",
                 "user": {
                     "id": user.id,
@@ -81,8 +86,8 @@ class UserRegistrationView(APIView):
                     "role": user.role
                 }
             }, status=status.HTTP_201_CREATED)
-        
-        return Response({
+            except Exception as e:
+               return Response({
             "status": "error",
             "errors": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
@@ -133,3 +138,6 @@ class UserProfileView(APIView):
         user = request.user
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
+    
+
+
