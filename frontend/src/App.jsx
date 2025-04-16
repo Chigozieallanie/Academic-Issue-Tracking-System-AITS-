@@ -18,22 +18,21 @@ import RegistraSignup from "./Registra/Registra signup";
 import RegistraLogin from "./Registra/Registralogin";
 import Registradashboard from "./Registra/Registra pages/Registradashboard";
 
-
 function App() {
   return (
     <Router>
       <Routes>
-      <Route path="/registra signup" element={<RegistraSignup />} />
-      <Route path="/registralogin" element={<RegistraLogin />} />
-      <Route path="/registradashboard" element={<Registradashboard />} />
-        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/" element={<Welcome />} />
+        <Route path="/registra signup" element={<RegistraSignup />} />
+        <Route path="/registralogin" element={<RegistraLogin />} />
+        <Route path="/registradashboard" element={<Registradashboard />} />
         <Route path="/verificationcode" element={<Verificationcode />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/" element={<StudentDashboard />}>
+        <Route path="/studentdashboard" element={<StudentDashboard />}>
           <Route path="profile" element={<Profile />} />
-          <Route path="/reportissue" element={<ReportIssue name="Allan" />} />
+          <Route path="reportissue" element={<ReportIssue name="Allan" />} />
           <Route
             path="my-course"
             element={
@@ -44,14 +43,14 @@ function App() {
               />
             }
           />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/notification" element={<Notifications />} />
-          <Route path="/issueList" element={<IssueList />} />
-          <Route path="/Logout" element={<Logout />} />
-          
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="notification" element={<Notifications />} />
+          <Route path="issueList" element={<IssueList />} />
+          <Route path="Logout" element={<Logout />} />
         </Route>
       </Routes>
     </Router>
   );
 }
+
 export default App;
