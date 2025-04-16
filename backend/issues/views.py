@@ -24,6 +24,7 @@ from .serializers import (
     UserLoginSerializer
 )
 from rest_framework.pagination import PageNumberPagination
+from .permissions import IsRole
 
 
 User = get_user_model()
@@ -32,8 +33,13 @@ User = get_user_model()
 class StudentProfileViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentProfileSerializer
-    permission_classes = [AllowAny] #[IsOwnerOrReadOnly | IsRole(['registrar'])]
-    permission_classes = [IsRole(['registrar'])]
+
+    class IsRegistrarRole(IsRole):
+        allowed_roles = ['registrar']
+
+    permission_classes = [IsRegistrarRole]
+
+
 
     def perform_create(self, serializer):
         if self.request.user.role == 'registrar':
