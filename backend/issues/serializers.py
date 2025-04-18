@@ -3,7 +3,6 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
-from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth import authenticate
 from .models import (
@@ -11,7 +10,7 @@ from .models import (
     CustomUser,
     StudentProfile,
     LecturerProfile,
-    RegistrarProfile,  # or AcademicRegistrar if that’s your model name
+    RegistrarProfile,
     Course,
     Enrollment,
     Mentorship,
@@ -21,6 +20,7 @@ from .models import (
 )
 
 User = get_user_model()
+
 
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
@@ -63,17 +63,15 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         fields = [
             'username', 'email', 'password', 'password2', 'role',
             'first_name', 'last_name',
-            'student_id', 'program', 'year_of_study',  # Student
-            'staff_id', 'department', 'specialization',  # Lecturer
-            'office', 'contact_info'  # Registrar
+            'student_id', 'program', 'year_of_study',
+            'staff_id', 'department', 'specialization',
+            'office', 'contact_info'
         ]
 
     def validate(self, attrs):
-        # Password match validation
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Passwords do not match."})
 
-        # Role-specific field validation
         role = attrs['role']
         if role == CustomUser.STUDENT:
             if not all([attrs.get('student_id'), attrs.get('program'), attrs.get('year_of_study')]):
@@ -93,10 +91,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        # Step 1: Extract profile data
         role = validated_data.pop('role')
         profile_data = {}
-        
+
         if role == CustomUser.STUDENT:
             profile_data = {
                 'student_id': validated_data.pop('student_id'),
@@ -115,15 +112,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                 'contact_info': validated_data.pop('contact_info')
             }
 
-        # Step 2: Create user (ONLY with core fields)
         password = validated_data.pop('password')
-        validated_data.pop('password2')  # Remove unused field
-        
+        validated_data.pop('password2')
+
         user = CustomUser.objects.create(**validated_data, role=role)
         user.set_password(password)
         user.save()
 
-        # Step 3: Create profile
         if role == CustomUser.STUDENT:
             StudentProfile.objects.create(user=user, **profile_data)
         elif role == CustomUser.LECTURER:
@@ -131,11 +126,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         elif role == CustomUser.REGISTRAR:
             RegistrarProfile.objects.create(user=user, **profile_data)
 
-        # Step 4: Generate token (optional)
         Token.objects.create(user=user)
         return user
-    
-    
+
+
 class StudentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentProfile
@@ -147,9 +141,10 @@ class LecturerProfileSerializer(serializers.ModelSerializer):
         model = LecturerProfile
         fields = ('staff_id', 'department', 'specialization')
 
+
 class RegistrarProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RegistrarProfile # or RegistrarProfile if that’s your model name   
+        model = RegistrarProfile
         fields = ('office', 'contact_info')
 
 
@@ -176,7 +171,7 @@ class UserLoginSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
-    
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
     role_data = serializers.SerializerMethodField()
@@ -186,34 +181,42 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'role', 'email_verified', 'requires_profile_setup', 'role_data']
 
     def get_role_data(self, user):
-        return user.get_role_data()  # This uses your existing `get_role_data()` method
-    
+        return user.get_role_data()
 
 
+# Added Serializers for the remaining models:
 
-
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
-    password = serializers.CharField(
-        write_only=True,
-        required=True,
-        validators=[validate_password]
-    )
-    password2 = serializers.CharField(write_only=True, required=True)
-
+class CourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('username', 'email', 'password', 'password2')
+        model = Course
+        fields = '__all__'
 
-    def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Passwords do not match."})
-        return attrs
 
-    def create(self, validated_data):
-        validated_data.pop('password2')
-        user = User.objects.create_user(**validated_data)
-        return user
+class EnrollmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enrollment
+        fields = '__all__'
+
+
+class MentorshipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mentorship
+        fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
+class CourseMaterialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseMaterial
+        fields = '__all__'
+
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
+        fields = '__all__'
