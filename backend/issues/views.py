@@ -1,4 +1,3 @@
-from tokenize import Token
 from rest_framework import generics, status, viewsets
 from .models import Issue, StudentProfile as Student, CustomUser
 from rest_framework.response import Response
@@ -26,13 +25,13 @@ from .permissions import IsRole, IsOwnerOrReadOnly
 User = get_user_model()
 
 
+class IsRegistrarRole(IsRole):
+    allowed_roles = ['registrar']
+
+
 class StudentProfileViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentProfileSerializer
-
-    class IsRegistrarRole(IsRole):
-        allowed_roles = ['registrar']
-
     permission_classes = [IsRegistrarRole]
 
     def perform_create(self, serializer):
@@ -46,9 +45,6 @@ class IssueListCreateView(generics.ListCreateAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated]
-
-
-
 
 
 class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
