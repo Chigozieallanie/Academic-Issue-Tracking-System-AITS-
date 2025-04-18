@@ -21,6 +21,9 @@ from .serializers import (
 )
 from rest_framework.pagination import PageNumberPagination
 from .permissions import IsRole, IsOwnerOrReadOnly
+from .models import Notification
+from .serializers import NotificationSerializer
+
 
 User = get_user_model()
 
@@ -144,3 +147,11 @@ class UserProfileView(APIView):
         user = request.user
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
+
+
+class NotificationListView(generics.ListAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('-created_at')
