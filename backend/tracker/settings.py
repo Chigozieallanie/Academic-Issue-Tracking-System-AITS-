@@ -192,3 +192,10 @@ if 'RENDER' in os.environ:
     DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # SECRET_KEY = os.environ.get('SECRET_KEY')
+
+import sys
+
+if 'test' in sys.argv:
+    AUTHENTICATION_BACKENDS = [
+        'django.contrib.auth.backends.ModelBackend',
+    ]
