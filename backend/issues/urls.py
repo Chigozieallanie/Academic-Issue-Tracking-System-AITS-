@@ -6,7 +6,8 @@ from .views import IssueRetrieveUpdateDestroy  # Import the view
 
 # RegisterView, LoginView #, IssueDetailView
 from .views import UserRegistrationView, UserLoginView, UserLogoutView, UserProfileView
-
+from django.urls import path
+from .views import NotificationListView
 urlpatterns = [
     path('register', UserRegistrationView.as_view(), name='user-register-no-slash'),
     path('register/', UserRegistrationView.as_view(), name='user-register'),
@@ -19,5 +20,6 @@ urlpatterns = [
     path('profile/', UserProfileView.as_view(), name='user-profile'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # path('issues/<int:pk>/', IssueDetailView.as_view(), name='issue-detail'),
+    path('notifications/', NotificationListView.as_view(), name='notifications-list'),
    
 ]
