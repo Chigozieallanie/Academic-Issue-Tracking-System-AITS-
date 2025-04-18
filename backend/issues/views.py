@@ -1,4 +1,3 @@
-from tokenize import Token
 from rest_framework import generics, status, viewsets
 from .models import Issue, StudentProfile as Student, CustomUser
 from rest_framework.response import Response
@@ -22,17 +21,20 @@ from .serializers import (
 )
 from rest_framework.pagination import PageNumberPagination
 from .permissions import IsRole, IsOwnerOrReadOnly
+from .models import Notification
+from .serializers import NotificationSerializer
+
 
 User = get_user_model()
+
+
+class IsRegistrarRole(IsRole):
+    allowed_roles = ['registrar']
 
 
 class StudentProfileViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentProfileSerializer
-
-    class IsRegistrarRole(IsRole):
-        allowed_roles = ['registrar']
-
     permission_classes = [IsRegistrarRole]
 
     def perform_create(self, serializer):
@@ -46,9 +48,6 @@ class IssueListCreateView(generics.ListCreateAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated]
-
-
-
 
 
 class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
@@ -148,3 +147,11 @@ class UserProfileView(APIView):
         user = request.user
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
+
+
+class NotificationListView(generics.ListAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('-created_at')

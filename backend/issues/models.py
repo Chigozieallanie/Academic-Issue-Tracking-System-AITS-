@@ -3,6 +3,9 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 # from .models import Issue, StudentProfile as Student, CustomUser
+from django.contrib.auth import get_user_model
+
+
 
 class Issue(models.Model):
     CATEGORY_CHOICES = [
@@ -18,6 +21,26 @@ class Issue(models.Model):
     coursecode = models.CharField(max_length=20)
     description = models.TextField()
     document = models.FileField(upload_to='issue_documents/', blank=True, null=True)
+
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='assigned_issues'
+    )
+
+
+
+
+
+
+
+
+
+
+
+
     
             
     def __str__(self):
@@ -178,3 +201,18 @@ class Attendance(models.Model):
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
     date = models.DateField()
     present = models.BooleanField(default=False)
+
+
+
+
+User = get_user_model()
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notification for {self.user.username}: {self.message}"
+
