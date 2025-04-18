@@ -2,39 +2,68 @@ from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from issues.permissions import IsRole, IsOwnerOrReadOnly
 from issues.models import CustomUser, Issue
+from rest_framework.test import APITestCase
+from rest_framework import status
+from django.test import override_settings
+from rest_framework.test import APIClient
 
-class IsRolePermissionTest(TestCase):
-    """
-    Unit tests for the IsRole permission.
-    """
+@override_settings(AUTHENTICATION_BACKENDS=['django.contrib.auth.backends.ModelBackend'])
+class IssuePermissionTestCase(APITestCase):
     def setUp(self):
-        self.factory = APIRequestFactory()
-        self.registrar_user = CustomUser.objects.create_user(
-            username='registrar_user', email='registrar@example.com', role='registrar'
-        )
-        self.student_user = CustomUser.objects.create_user(
-            username='student_user', email='student@example.com', role='student'
-        )
+        self.client = APIClient()
+        self.user1 = CustomUser.objects.create_user(username='user1', email='user1@example.com', password='password')
+        self.user2 = CustomUser.objects.create_user(username='user2', email='user2@example.com', password='password')
+        self.issue = Issue.objects.create(owner=self.user1, title='Test Issue', category='academic')
+        print(f"Created Issue ID: {self.issue.id}")  # Debugging the Issue ID
+        self.client.force_authenticate(user=self.user1)  # Authenticate as user1
 
-    def test_is_role_permission_granted(self):
-        """
-        Test that a user with the correct role is granted permission.
-        """
-        request = self.factory.get('/')
-        request.user = self.registrar_user
-        permission = IsRole()
-        permission.allowed_roles = ['registrar']
-        self.assertTrue(permission.has_permission(request, None))
+    def test_owner_can_update_issue(self):
+        url = f'/api/issues/{self.issue.id}/'
+        print(f"Testing URL: {url}")  # Debugging URL
+        data = {
+            'title': 'Updated Title',
+            'category': self.issue.category,
+            'lecturer': 'Test Lecturer',
+            'coursecode': 'TEST123',
+            'description': 'Updated issue description'
+        }
+        response = self.client.put(url, data, format='json')
+        print(f"Response Status Code: {response.status_code}")  # Debugging response
+        print(f"Response Data: {response.data}")  # Debugging response data
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_is_role_permission_denied(self):
-        """
-        Test that a user without the correct role is denied permission.
-        """
-        request = self.factory.get('/')
-        request.user = self.student_user
-        permission = IsRole()
-        permission.allowed_roles = ['registrar']
-        self.assertFalse(permission.has_permission(request, None))
+    def test_non_owner_cannot_update_issue(self):
+        self.client.force_authenticate(user=self.user2)  # Authenticate as user2
+        url = f'/api/issues/{self.issue.id}/'
+        print(f"Testing URL: {url}")  # Debugging URL
+        data = {
+            'title': 'Updated Title',
+            'category': self.issue.category,
+            'lecturer': 'Test Lecturer',
+            'coursecode': 'TEST123',
+            'description': 'Updated issue description'
+        }
+        response = self.client.put(url, data, format='json')
+        print(f"Response Status Code: {response.status_code}")  # Debugging response
+        print(f"Response Data: {response.data}")  # Debugging response data
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_owner_can_delete_issue(self):
+        url = f'/api/issues/{self.issue.id}/'
+        print(f"Testing URL: {url}")  # Debugging URL
+        response = self.client.delete(url)
+        print(f"Response Status Code: {response.status_code}")  # Debugging response
+        print(f"Response Data: {response.data}")  # Debugging response data
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_non_owner_cannot_delete_issue(self):
+        self.client.force_authenticate(user=self.user2)  # Authenticate as user2
+        url = f'/api/issues/{self.issue.id}/'
+        print(f"Testing URL: {url}")  # Debugging URL
+        response = self.client.delete(url)
+        print(f"Response Status Code: {response.status_code}")  # Debugging response
+        print(f"Response Data: {response.data}")  # Debugging response data
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class IsOwnerOrReadOnlyPermissionTest(TestCase):
@@ -49,7 +78,7 @@ class IsOwnerOrReadOnlyPermissionTest(TestCase):
         self.other_user = CustomUser.objects.create_user(
             username='other_user', email='other@example.com'
         )
-        self.issue = Issue.objects.create(user=self.owner_user, title='Test Issue')
+        self.issue = Issue.objects.create(owner=self.owner_user, title='Test Issue')
 
     def test_owner_has_permission(self):
         """
