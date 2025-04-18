@@ -19,6 +19,9 @@ from .models import (
     Attendance
 )
 
+from .models import Notification
+
+
 User = get_user_model()
 
 
@@ -220,3 +223,11 @@ class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = '__all__'
+
+
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'message', 'is_read', 'created_at']        
