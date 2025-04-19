@@ -14,6 +14,16 @@ class Issue(models.Model):
         ('technical', 'Technical'),
         ('other', 'Other'),
     ]
+
+    STATUS_CHOICES = [
+        ('open', 'Open'),
+        ('pending', 'Pending'),
+        ('assigned', 'Assigned'),
+        ('resolved', 'Resolved'),
+        ('closed', 'Closed'),
+    ]
+
+
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,default=1)
     title = models.CharField(max_length=255, default="Default Title")
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='academic')
@@ -21,7 +31,7 @@ class Issue(models.Model):
     coursecode = models.CharField(max_length=20)
     description = models.TextField()
     document = models.FileField(upload_to='issue_documents/', blank=True, null=True)
-
+    status = models.CharField(max_length=10,choices=STATUS_CHOICES,default='open',  )
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.SET_NULL,
@@ -29,19 +39,6 @@ class Issue(models.Model):
         blank=True,
         related_name='assigned_issues'
     )
-
-
-
-
-
-
-
-
-
-
-
-
-    
             
     def __str__(self):
         return self.title
