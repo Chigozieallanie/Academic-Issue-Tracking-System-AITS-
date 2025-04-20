@@ -1,5 +1,5 @@
 from rest_framework import generics, status, viewsets
-from .models import Issue, StudentProfile as Student, CustomUser
+from .models import Issue, StudentProfile as Student, CustomUser, LecturerProfile
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -23,6 +23,8 @@ from rest_framework.pagination import PageNumberPagination
 from .permissions import IsRole, IsOwnerOrReadOnly
 from .models import Notification
 from .serializers import NotificationSerializer
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 User = get_user_model()
@@ -44,10 +46,15 @@ class StudentProfileViewSet(viewsets.ModelViewSet):
             serializer.save(user=self.request.user)
 
 
+class CustomPagination(PageNumberPagination):
+    page_size = 10            
+
+
 class IssueListCreateView(generics.ListCreateAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = CustomPagination
 
 
 class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
@@ -56,6 +63,39 @@ class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Issue.objects.all()
+
+    def perform_update(self, serializer):
+        issue = self.get_object()
+        # Before updating, send notification if the status is changed
+        old_status = issue.status
+        new_status = serializer.validated_data.get('status', issue.status)
+
+        if old_status != new_status:
+            self.send_status_update_email(issue, old_status, new_status)
+        
+        serializer.save()
+
+    def send_status_update_email(self, issue, old_status, new_status):
+        # Email notification logic here
+        subject = f"Issue Status Updated: {issue.title}"
+        message = f"The status of the issue '{issue.title}' has been updated from '{old_status}' to '{new_status}'."
+        
+        # Send email to the owner (Student)
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [issue.owner.email]
+        )
+        
+        # Send email to the lecturer if available
+        if issue.lecturer:
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [issue.lecturer.email]
+            )
 
 
 class UserRegistrationView(APIView):
@@ -135,8 +175,7 @@ class UserLogoutView(APIView):
     def post(self, request):
         logout(request)
         return Response(
-            {'message': 'Successfully logged out'},
-            status=status.HTTP_200_OK
+            status=status.HTTP_204_NO_CONTENT 
         )
 
 
@@ -152,6 +191,7 @@ class UserProfileView(APIView):
 class NotificationListView(generics.ListAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = CustomPagination  
 
     def get_queryset(self):
         return Notification.objects.filter(user=self.request.user).order_by('-created_at')
