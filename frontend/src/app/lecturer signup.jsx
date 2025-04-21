@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AtSign, KeyRound, User } from "lucide-react";
 
 export default function LecturerSignup() {
   const navigate = useNavigate();
@@ -31,55 +30,46 @@ export default function LecturerSignup() {
             <label htmlFor="name" className="block font-medium">
               Name
             </label>
-            <div className="relative">
-              <User className="absolute left-3 top-2.5 h-5 w-5 text-primary" />
-              <input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Enter your name"
-                value={formValues.name}
-                onChange={handleChange}
-                className="pl-10 w-full border rounded-md p-2"
-                required
-              />
-            </div>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Enter your name"
+              value={formValues.name}
+              onChange={handleChange}
+              className="w-full border rounded-md p-2"
+              required
+            />
           </div>
           <div>
             <label htmlFor="email" className="block font-medium">
               Email
             </label>
-            <div className="relative">
-              <AtSign className="absolute left-3 top-2.5 h-5 w-5 text-primary" />
-              <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                value={formValues.email}
-                onChange={handleChange}
-                className="pl-10 w-full border rounded-md p-2"
-                required
-              />
-            </div>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              value={formValues.email}
+              onChange={handleChange}
+              className="w-full border rounded-md p-2"
+              required
+            />
           </div>
           <div>
             <label htmlFor="password" className="block font-medium">
               Password
             </label>
-            <div className="relative">
-              <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-primary" />
-              <input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Enter your password"
-                value={formValues.password}
-                onChange={handleChange}
-                className="pl-10 w-full border rounded-md p-2"
-                required
-              />
-            </div>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              value={formValues.password}
+              onChange={handleChange}
+              className="w-full border rounded-md p-2"
+              required
+            />
           </div>
           <button
             type="submit"
