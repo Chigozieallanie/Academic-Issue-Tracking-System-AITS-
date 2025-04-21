@@ -16,7 +16,8 @@ import Verificationcode from "./Signupxx/Verificationcode";
 import Notifications from "./pages/Notifications";
 import RegistraSignup from "./Registra/Registra signup";
 import RegistraLogin from "./Registra/Registralogin";
-import Registradashboard from "./Registra/Registra pages/Registradashboard"; 
+import Registradashboard from "./Registra/Registra pages/Registradashboard";
+import LecturerSignup from "./app/lecturer signup"; // Import Lecturer Signup
 
 function App() {
   return (
@@ -48,6 +49,9 @@ function App() {
           <Route path="issueList" element={<IssueList />} />
           <Route path="Logout" element={<Logout />} />
         </Route>
+
+        {/* Lecturer Signup Route */}
+        <Route path="/lecturersignup" element={<LecturerSignup />} />
       </Routes>
     </Router>
   );
