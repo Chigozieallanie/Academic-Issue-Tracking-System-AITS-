@@ -1,27 +1,23 @@
-"use client"
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AtSign, Eye, EyeOff, KeyRound } from "lucide-react";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { AtSign, Eye, EyeOff, KeyRound } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import'./global.css';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import "./global.css";
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    // In a real app, you would handle the login process here
-    // For demo purposes, we'll just redirect to the dashboard
-    router.push("/dashboard")
-  }
+    e.preventDefault();
+    // Simulate login process
+    navigate("/dashboard"); // Redirect to dashboard after login
+  };
 
   return (
     <div className="min-h-screen bg-primary/10 flex items-center justify-center p-4">
@@ -54,7 +50,7 @@ export default function LoginPage() {
                 <Label htmlFor="password" className="text-black font-medium">
                   Password
                 </Label>
-                <Link href="/forgot-password" className="text-sm text-primary hover:underline font-medium">
+                <Link to="/forgot-password" className="text-sm text-primary hover:underline font-medium">
                   Forgot password?
                 </Link>
               </div>
@@ -94,7 +90,7 @@ export default function LoginPage() {
             </Button>
             <div className="text-center text-sm">
               Don&apos;t have an account?{" "}
-              <Link href="/signup" className="text-primary hover:underline font-medium">
+              <Link to="/signup" className="text-primary hover:underline font-medium">
                 Sign up
               </Link>
             </div>
@@ -102,5 +98,5 @@ export default function LoginPage() {
         </form>
       </Card>
     </div>
-  )
+  );
 }
