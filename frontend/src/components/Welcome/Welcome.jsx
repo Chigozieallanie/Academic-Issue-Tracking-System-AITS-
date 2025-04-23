@@ -14,7 +14,7 @@ function Welcome() {
             <Link to="/signup">
               <button className="role-button">Student</button>
             </Link>
-            <Link to="/lecturer">
+            <Link to="/lecturer signup">
               <button className="role-button">Lecturer</button>
             </Link>
             <Link to="/Registra signup">
