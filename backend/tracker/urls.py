@@ -22,10 +22,22 @@ from rest_framework_simplejwt.views import (
 )
 from django.urls import path, include
 from django.conf import settings
+from .views import UserRegistrationView, IssueListCreateView, UserDetailView
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/register/', UserRegistrationView.as_view(), name='register'),
+    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+    path('api/issues/', IssueListCreateView.as_view(), name='issue-list-create'),
+    path('api/issues/<int:pk>/', IssueListCreateView.as_view(), name='issue-detail'),  # or a separate RetrieveAPIView
+
+    path('api/users/me/', UserDetailView.as_view(), name='user-detail'),
+    path('api/users/<int:pk>/', UserDetailView.as_view(), name='user-update-delete'),
+]
     path('api/', include('issues.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
