@@ -69,3 +69,27 @@ class Registrar(models.Model):
     
     def __str__(self):
         return f"{self.user.username} ({self.employee_id})"
+
+class Issue(models.Model):
+    CATEGORY_CHOICES = [
+        ('academic', 'Academic'),
+        ('technical', 'Technical'),
+        ('administrative', 'Administrative'),
+    ]
+    
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    course_code = models.CharField(max_length=20)
+    description = models.TextField()
+    document = models.FileField(upload_to='issue_documents/', blank=True, null=True)
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reported_issues')
+    assigned_to = models.ForeignKey(Lecturer, on_delete=models.SET_NULL, related_name='assigned_issues', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=20, default='open', choices=[
+        ('open', 'Open'),
+        ('in_progress', 'In Progress'),
+        ('resolved', 'Resolved')
+    ])
+
+    def __str__(self):
+        return f"{self.category} - {self.course_code}"
