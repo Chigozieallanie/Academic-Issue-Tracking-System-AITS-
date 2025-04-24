@@ -2,29 +2,23 @@ from rest_framework import generics, status, viewsets
 from .models import Issue, StudentProfile as Student, CustomUser, LecturerProfile
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
-
+#from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-
 from django.contrib.auth import get_user_model
 from .models import StudentProfile, LecturerProfile, RegistrarProfile
 from django.contrib.auth import logout
-
 from rest_framework.pagination import PageNumberPagination
 from .permissions import IsRole, IsOwnerOrReadOnly
 from .models import Notification
-
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import MinValueValidator, MaxValueValidator
-
-
 from .models import (
     Issue,
     CustomUser,
