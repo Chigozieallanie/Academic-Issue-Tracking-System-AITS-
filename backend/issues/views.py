@@ -25,7 +25,7 @@ from .models import Notification
 from .serializers import NotificationSerializer
 from django.core.mail import send_mail
 from django.conf import settings
-
+from rest_framework.permissions import AllowAny
 
 User = get_user_model()
 
@@ -47,14 +47,19 @@ class StudentProfileViewSet(viewsets.ModelViewSet):
 
 
 class CustomPagination(PageNumberPagination):
-    page_size = 10            
+    page_size = 10
 
 
 class IssueListCreateView(generics.ListCreateAPIView):
-    queryset = Issue.objects.all()
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = CustomPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'student':
+            return Issue.objects.filter(owner=user)
+        return Issue.objects.all()
 
 
 class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
@@ -72,14 +77,14 @@ class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if old_status != new_status:
             self.send_status_update_email(issue, old_status, new_status)
-        
+
         serializer.save()
 
     def send_status_update_email(self, issue, old_status, new_status):
         # Email notification logic here
         subject = f"Issue Status Updated: {issue.title}"
         message = f"The status of the issue '{issue.title}' has been updated from '{old_status}' to '{new_status}'."
-        
+
         # Send email to the owner (Student)
         send_mail(
             subject,
@@ -87,14 +92,14 @@ class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             settings.DEFAULT_FROM_EMAIL,
             [issue.owner.email]
         )
-        
+
         # Send email to the lecturer if available
         if issue.lecturer:
             send_mail(
                 subject,
                 message,
                 settings.DEFAULT_FROM_EMAIL,
-                [issue.lecturer.email]
+                [issue.lecturer.user.email]
             )
 
 
@@ -143,7 +148,7 @@ class UserRegistrationView(APIView):
 
 class UserLoginView(APIView):
     serializer_class = UserLoginSerializer
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def post(self, request):
         # Validate the incoming data
@@ -175,7 +180,7 @@ class UserLogoutView(APIView):
     def post(self, request):
         logout(request)
         return Response(
-            status=status.HTTP_204_NO_CONTENT 
+            status=status.HTTP_204_NO_CONTENT
         )
 
 
@@ -191,7 +196,7 @@ class UserProfileView(APIView):
 class NotificationListView(generics.ListAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [permissions.IsAuthenticated]
-    pagination_class = CustomPagination  
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         return Notification.objects.filter(user=self.request.user).order_by('-created_at')
