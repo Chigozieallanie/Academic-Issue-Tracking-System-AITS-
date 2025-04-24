@@ -1,51 +1,50 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { ArrowLeft, CheckCircle2 } from "lucide-react"
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import "./global.css";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Textarea } from "@/components/ui/textarea"
-import'./global.css';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function ResolveIssuePage() {
-  const params = useParams()
-  const router = useRouter()
-  const issueId = params.id
+  const params = useParams();
+  const navigate = useNavigate();
+  const issueId = params.id;
 
   // Find the issue from our mock data
-  const issue = assignedIssues.find((i) => i.id === issueId)
+  const issue = assignedIssues.find((i) => i.id === issueId);
 
-  const [resolution, setResolution] = useState("resolve")
+  const [resolution, setResolution] = useState("resolve");
 
   if (!issue) {
     return (
       <div className="flex h-[80vh] flex-col items-center justify-center">
         <h1 className="text-2xl font-bold">Issue not found</h1>
         <p className="text-muted-foreground">The issue you are looking for does not exist.</p>
-        <Button className="mt-4" onClick={() => router.back()}>
+        <Button className="mt-4" onClick={() => navigate(-1)}>
           Go Back
         </Button>
       </div>
-    )
+    );
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // In a real app, you would update the issue status in the backend
-    alert(`Issue ${resolution === "resolve" ? "resolved" : "rejected"}!`)
-    router.push("/dashboard/assigned")
-  }
+    alert(`Issue ${resolution === "resolve" ? "resolved" : "rejected"}!`);
+    navigate("/dashboard/assigned");
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={() => router.back()}>
-          <ArrowLeft className="h-4 w-4" />
+        <Button variant="outline" size="icon" onClick={() => navigate(-1)}>
+          <span className="icon-placeholder">←</span>
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Resolve Issue</h1>
@@ -66,14 +65,14 @@ export default function ResolveIssuePage() {
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="resolve" id="resolve" />
                   <Label htmlFor="resolve" className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    <span className="icon-placeholder">✅</span>
                     Resolve Issue
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="reject" id="reject" />
                   <Label htmlFor="reject" className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-red-600" />
+                    <span className="icon-placeholder">❌</span>
                     Reject Issue
                   </Label>
                 </div>
@@ -119,7 +118,7 @@ export default function ResolveIssuePage() {
             )}
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button type="button" variant="outline" onClick={() => router.back()}>
+            <Button type="button" variant="outline" onClick={() => navigate(-1)}>
               Cancel
             </Button>
             <Button type="submit">{resolution === "resolve" ? "Resolve Issue" : "Reject Issue"}</Button>
@@ -127,7 +126,7 @@ export default function ResolveIssuePage() {
         </form>
       </Card>
     </div>
-  )
+  );
 }
 
 const assignedIssues = [
@@ -182,4 +181,4 @@ const assignedIssues = [
     status: "rejected",
     description: "Student is requesting special accommodations for the final exam due to a learning disability.",
   },
-]
+];

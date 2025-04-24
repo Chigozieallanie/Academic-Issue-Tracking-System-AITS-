@@ -20,9 +20,41 @@ from .models import Notification
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
+from django.contrib.auth.password_validation import validate_password
+from django.core.validators import MinValueValidator, MaxValueValidator
+
+
+from .models import (
+    Issue,
+    CustomUser,
+    StudentProfile,
+    LecturerProfile,
+    RegistrarProfile,
+    Course,
+    Enrollment,
+    Mentorship,
+    Comment,
+    CourseMaterial,
+    Attendance
+)
+
+
 
 User = get_user_model()
 
+from rest_framework import serializers
+from .models import User, Department, Issue
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'is_student', 'is_registrar', 'department']
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = '__all__'
 
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,26 +1,11 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import {
-  BarChart3,
-  Calendar,
-  CheckCircle2,
-  Clock,
-  Filter,
-  HelpCircle,
-  PieChart,
-  TrendingUp,
-  XCircle,
-} from "lucide-react"
+import { useState } from "react";
+import "./global.css";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import'./global.css';
 export default function AnalyticsPage() {
-  const [timeRange, setTimeRange] = useState("month")
-  const [department, setDepartment] = useState("all")
+  const [timeRange, setTimeRange] = useState("month");
+  const [department, setDepartment] = useState("all");
 
   return (
     <div className="space-y-6">
@@ -41,7 +26,7 @@ export default function AnalyticsPage() {
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger className="w-full sm:w-[150px]">
               <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
+                <span className="icon-placeholder">📅</span>
                 <SelectValue placeholder="Time Range" />
               </div>
             </SelectTrigger>
@@ -55,7 +40,7 @@ export default function AnalyticsPage() {
           <Select value={department} onValueChange={setDepartment}>
             <SelectTrigger className="w-full sm:w-[180px]">
               <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4" />
+                <span className="icon-placeholder">🔍</span>
                 <SelectValue placeholder="Department" />
               </div>
             </SelectTrigger>
@@ -79,7 +64,7 @@ export default function AnalyticsPage() {
               change="+12%"
               trend="up"
               description="vs. previous period"
-              icon={<BarChart3 className="h-4 w-4 text-primary" />}
+              icon={<span className="icon-placeholder">📊</span>}
             />
             <StatCard
               title="Pending"
@@ -87,7 +72,7 @@ export default function AnalyticsPage() {
               change="-5%"
               trend="down"
               description="vs. previous period"
-              icon={<Clock className="h-4 w-4 text-yellow-500" />}
+              icon={<span className="icon-placeholder">⏳</span>}
             />
             <StatCard
               title="Resolved"
@@ -95,7 +80,7 @@ export default function AnalyticsPage() {
               change="+18%"
               trend="up"
               description="vs. previous period"
-              icon={<CheckCircle2 className="h-4 w-4 text-green-500" />}
+              icon={<span className="icon-placeholder">✅</span>}
             />
             <StatCard
               title="Avg. Resolution Time"
@@ -103,7 +88,7 @@ export default function AnalyticsPage() {
               change="-0.8 days"
               trend="down"
               description="vs. previous period"
-              icon={<TrendingUp className="h-4 w-4 text-primary" />}
+              icon={<span className="icon-placeholder">📈</span>}
             />
           </div>
 
@@ -115,7 +100,7 @@ export default function AnalyticsPage() {
               </CardHeader>
               <CardContent className="p-6">
                 <div className="aspect-[4/3] w-full bg-primary/5 rounded-lg flex items-center justify-center">
-                  <PieChart className="h-32 w-32 text-primary/40" />
+                  <span className="icon-placeholder">📊</span>
                 </div>
                 <div className="mt-6 grid grid-cols-2 gap-4">
                   <StatusLegendItem status="pending" count={42} percentage={27} />
@@ -133,7 +118,7 @@ export default function AnalyticsPage() {
               </CardHeader>
               <CardContent className="p-6">
                 <div className="aspect-[4/3] w-full bg-primary/5 rounded-lg flex items-center justify-center">
-                  <BarChart3 className="h-32 w-32 text-primary/40" />
+                  <span className="icon-placeholder">📊</span>
                 </div>
                 <div className="mt-6 space-y-4">
                   <CategoryBar category="Grade Disputes" count={58} percentage={37} />
@@ -144,123 +129,10 @@ export default function AnalyticsPage() {
               </CardContent>
             </Card>
           </div>
-
-          <Card className="border-primary/20">
-            <CardHeader className="bg-primary/5 border-b border-primary/10">
-              <CardTitle className="text-black">Recent Activity</CardTitle>
-              <CardDescription>Latest issue resolutions and updates</CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="divide-y divide-primary/10">
-                {recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-start gap-4 p-4">
-                    <div
-                      className={`mt-0.5 rounded-full p-1.5 ${
-                        activity.type === "resolved"
-                          ? "bg-green-100 text-green-600"
-                          : activity.type === "rejected"
-                            ? "bg-red-100 text-red-600"
-                            : "bg-blue-100 text-blue-600"
-                      }`}
-                    >
-                      {activity.type === "resolved" ? (
-                        <CheckCircle2 className="h-4 w-4" />
-                      ) : activity.type === "rejected" ? (
-                        <XCircle className="h-4 w-4" />
-                      ) : (
-                        <HelpCircle className="h-4 w-4" />
-                      )}
-                    </div>
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none text-black">{activity.title}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {activity.description} • {activity.time}
-                      </p>
-                    </div>
-                    <Button variant="outline" size="sm" className="shrink-0">
-                      View Details
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="trends" className="space-y-6">
-          <Card className="border-primary/20">
-            <CardHeader className="bg-primary/5 border-b border-primary/10">
-              <CardTitle className="text-black">Issue Trends</CardTitle>
-              <CardDescription>Monthly trends of issues by status</CardDescription>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="aspect-[21/9] w-full bg-primary/5 rounded-lg flex items-center justify-center">
-                <TrendingUp className="h-32 w-32 text-primary/40" />
-              </div>
-              <div className="mt-6 grid grid-cols-4 gap-4">
-                <div className="text-center">
-                  <div className="text-sm font-medium text-muted-foreground">Jan</div>
-                  <div className="text-lg font-bold">42</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-sm font-medium text-muted-foreground">Feb</div>
-                  <div className="text-lg font-bold">38</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-sm font-medium text-muted-foreground">Mar</div>
-                  <div className="text-lg font-bold">45</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-sm font-medium text-muted-foreground">Apr</div>
-                  <div className="text-lg font-bold">31</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="departments" className="space-y-6">
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card className="border-primary/20">
-              <CardHeader className="bg-primary/5 border-b border-primary/10">
-                <CardTitle className="text-black">Issues by Department</CardTitle>
-                <CardDescription>Distribution of issues across departments</CardDescription>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="aspect-[4/3] w-full bg-primary/5 rounded-lg flex items-center justify-center">
-                  <PieChart className="h-32 w-32 text-primary/40" />
-                </div>
-                <div className="mt-6 space-y-4">
-                  <DepartmentBar department="Computer Science" count={62} percentage={40} />
-                  <DepartmentBar department="Engineering" count={45} percentage={29} />
-                  <DepartmentBar department="Business" count={28} percentage={18} />
-                  <DepartmentBar department="Arts & Humanities" count={21} percentage={13} />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-primary/20">
-              <CardHeader className="bg-primary/5 border-b border-primary/10">
-                <CardTitle className="text-black">Resolution Time by Department</CardTitle>
-                <CardDescription>Average time to resolve issues by department</CardDescription>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="aspect-[4/3] w-full bg-primary/5 rounded-lg flex items-center justify-center">
-                  <BarChart3 className="h-32 w-32 text-primary/40" />
-                </div>
-                <div className="mt-6 space-y-4">
-                  <ResolutionTimeBar department="Computer Science" time="1.8 days" />
-                  <ResolutionTimeBar department="Engineering" time="2.3 days" />
-                  <ResolutionTimeBar department="Business" time="3.1 days" />
-                  <ResolutionTimeBar department="Arts & Humanities" time="2.5 days" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
 
 function StatCard({ title, value, change, trend, description, icon }) {
@@ -284,7 +156,7 @@ function StatCard({ title, value, change, trend, description, icon }) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function StatusLegendItem({ status, count, percentage }) {
@@ -292,31 +164,31 @@ function StatusLegendItem({ status, count, percentage }) {
     pending: {
       color: "bg-yellow-100",
       textColor: "text-yellow-800",
-      icon: Clock,
+      icon: "⏳",
     },
     "in-progress": {
       color: "bg-blue-100",
       textColor: "text-blue-800",
-      icon: HelpCircle,
+      icon: "🔄",
     },
     resolved: {
       color: "bg-green-100",
       textColor: "text-green-800",
-      icon: CheckCircle2,
+      icon: "✅",
     },
     rejected: {
       color: "bg-red-100",
       textColor: "text-red-800",
-      icon: XCircle,
+      icon: "❌",
     },
-  }
+  };
 
-  const { color, textColor, icon: Icon } = statusConfig[status]
+  const { color, textColor, icon } = statusConfig[status];
 
   return (
     <div className="flex items-center gap-2">
       <div className={`rounded-full p-1.5 ${color} ${textColor}`}>
-        <Icon className="h-3 w-3" />
+        <span>{icon}</span>
       </div>
       <div className="flex-1">
         <div className="text-sm font-medium capitalize">{status.replace("-", " ")}</div>
@@ -325,7 +197,7 @@ function StatusLegendItem({ status, count, percentage }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function CategoryBar({ category, count, percentage }) {
@@ -341,72 +213,5 @@ function CategoryBar({ category, count, percentage }) {
         <div className="h-2 rounded-full bg-primary" style={{ width: `${percentage}%` }}></div>
       </div>
     </div>
-  )
+  );
 }
-
-function DepartmentBar({ department, count, percentage }) {
-  return (
-    <div className="space-y-1">
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium">{department}</div>
-        <div className="text-sm text-muted-foreground">
-          {count} ({percentage}%)
-        </div>
-      </div>
-      <div className="h-2 w-full rounded-full bg-primary/10">
-        <div className="h-2 rounded-full bg-primary" style={{ width: `${percentage}%` }}></div>
-      </div>
-    </div>
-  )
-}
-
-function ResolutionTimeBar({ department, time }) {
-  // Calculate a percentage for the bar width (assuming max is 5 days)
-  const days = Number.parseFloat(time.split(" ")[0])
-  const percentage = (days / 5) * 100
-
-  return (
-    <div className="space-y-1">
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium">{department}</div>
-        <div className="text-sm text-muted-foreground">{time}</div>
-      </div>
-      <div className="h-2 w-full rounded-full bg-primary/10">
-        <div className="h-2 rounded-full bg-primary" style={{ width: `${percentage}%` }}></div>
-      </div>
-    </div>
-  )
-}
-
-const recentActivity = [
-  {
-    type: "resolved",
-    title: "Grade dispute for CS101 Final Exam resolved",
-    description: "Resolved by Dr. John Smith",
-    time: "2 hours ago",
-  },
-  {
-    type: "in-progress",
-    title: "Request for assignment extension updated",
-    description: "Status changed to In Progress",
-    time: "3 hours ago",
-  },
-  {
-    type: "rejected",
-    title: "Accommodation request for exam rejected",
-    description: "Rejected by Dr. Jane Doe",
-    time: "5 hours ago",
-  },
-  {
-    type: "resolved",
-    title: "Question about project requirements resolved",
-    description: "Resolved by Dr. John Smith",
-    time: "Yesterday",
-  },
-  {
-    type: "resolved",
-    title: "Request for additional study materials resolved",
-    description: "Resolved by Dr. Emily Johnson",
-    time: "2 days ago",
-  },
-]
