@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import IssueSerializer
-from utils.permissions import HasPermission
+# from utils.permissions import HasPermission  # Removed as it could not be resolved
 from django.contrib.auth import authenticate
 from rest_framework import permissions
 from rest_framework.authtoken.models import Token
