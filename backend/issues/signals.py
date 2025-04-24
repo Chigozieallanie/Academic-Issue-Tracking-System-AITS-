@@ -85,3 +85,7 @@ def notify_lecturer_on_assignment(sender, instance, created, **kwargs):
             recipient_list=[instance.assigned_to.email],
             fail_silently=False
         )            
+@receiver(post_save, sender=CustomUser)
+def assign_default_permissions(sender, instance, created, **kwargs):
+    if created and instance.user_type == 'student':
+        instance.permissions.add(Permission.objects.get(name='issue:create'))
