@@ -51,15 +51,7 @@ class CustomPagination(PageNumberPagination):
 
 
 class IssueListCreateView(generics.ListCreateAPIView):
-    serializer_class = IssueSerializer
-    permission_classes = [IsAuthenticated]
-    pagination_class = CustomPagination
-
-    def get_queryset(self):
-        user = self.request.user
-        if user.role == 'student':
-            return Issue.objects.filter(owner=user)
-        return Issue.objects.all()
+    
 
 
 class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
