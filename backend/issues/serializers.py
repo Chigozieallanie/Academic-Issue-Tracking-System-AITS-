@@ -46,6 +46,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'is_student', 'is_registrar', 'department']
 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['permissions'] = list(self.user.permissions.values_list('name', flat=True))
+        return data
+
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
