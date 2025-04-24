@@ -1,6 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+class Permission(models.Model):
+    name = models.CharField(max_length=100, unique=True)  # e.g., "issue:create"
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
 # Custom user model
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
