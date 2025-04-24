@@ -103,9 +103,11 @@ class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
 
-class UserRegistrationView(APIView):
+class UserRegistrationView(generics.CreateAPIView):
     permission_classes = []  # Allow anyone to access
-
+    queryset = User.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = UserRegistrationSerializer
     def get(self, request):
         """Provide registration form information"""
         return Response({
