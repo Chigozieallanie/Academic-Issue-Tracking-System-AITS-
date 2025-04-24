@@ -34,3 +34,26 @@ class Issue(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.status}"
+
+class Student(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        limit_choices_to={'user_type': 'student'}
+    )
+    student_id = models.CharField(max_length=20, unique=True)
+    program = models.CharField(max_length=100)
+
+class Lecturer(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        limit_choices_to={'user_type': 'lecturer'}
+    )
+    staff_id = models.CharField(max_length=20, unique=True)
+    department = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.user.username} ({self.staff_id})"
