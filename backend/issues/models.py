@@ -27,7 +27,7 @@ class Issue(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,default=1)
     title = models.CharField(max_length=255, default="Default Title")
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='academic')
-    lecturer = models.CharField(max_length=50)
+    lecturer = models.ForeignKey('LecturerProfile', on_delete=models.SET_NULL, null=True, blank=True)
     coursecode = models.CharField(max_length=20)
     description = models.TextField()
     document = models.FileField(upload_to='issue_documents/', blank=True, null=True)
@@ -147,6 +147,13 @@ class LecturerProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - Lecturer"
+    
+    @property
+    def issues(self):
+        return self.user.assigned_issues.all()
+
+
+
 
 class RegistrarProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='registrar_profile')
