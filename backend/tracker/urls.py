@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import (
 )
 from django.urls import path, include
 from django.conf import settings
-from views import UserRegistrationView, IssueListCreateView, UserDetailView
+from issues.views import UserRegistrationView, IssueListCreateView, UserDetailView
 from django.conf.urls.static import static
 
 urlpatterns = [
