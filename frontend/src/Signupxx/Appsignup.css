@@ -86,7 +86,7 @@
 }
 .signup-page {
   background-image: url("/public/mainbuilding.jpg");
-  height: 100vh;
+  height: 200vh;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -116,4 +116,24 @@
 
 .password-toggle:hover {
   color: #333;
+}
+
+
+.role-fields {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.role-fields .form-group {
+  margin-bottom: 15px;
+}
+
+.error-message {
+  white-space: pre-line; /* To show multiple line errors */
+}
+.password-input {
+  display: flex;
+  align-items: center;
+  position: relative;
 }

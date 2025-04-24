@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: academic-issue-tracking-system-aits-
+    runtime: python
+    pythonVersion: "3.13.1"
+    skipPoetryInstall: true  # Properly disables Poetry
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+    startCommand: |
+      python manage.py migrate
+      gunicorn tracker.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DISABLE_COLLECTSTATIC
+        value: 0  # Correct for Whitenoise
+      - key: RENDER
+        value: true
