@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class Permission(models.Model):
-    name = models.CharField(max_length=100, unique=True)  # e.g., "issue:create"
+    name = models.CharField(max_length=100, unique=True) 
     description = models.TextField()
 
     def __str__(self):
