@@ -122,6 +122,11 @@ class UserRegistrationView(generics.CreateAPIView):
                 "last_name": "string"
             }
         })
+    def get_object(self):
+        # If 'me' endpoint, return current user
+        if self.kwargs.get('pk') == 'me':
+            return self.request.user
+        return super().get_object()
 
     def post(self, request):
         """Handle user registration"""
