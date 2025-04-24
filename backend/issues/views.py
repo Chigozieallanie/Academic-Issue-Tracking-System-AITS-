@@ -51,7 +51,16 @@ class CustomPagination(PageNumberPagination):
 
 
 class IssueListCreateView(generics.ListCreateAPIView):
-    
+    queryset = Issue.objects.all()
+    serializer_class = IssueSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.IsAuthenticated()]  # Students must be logged in to create
+        return [permissions.IsAuthenticated()]  # Lecturers and registrars can view
+
+    def perform_create(self, serializer):
+        serializer.save(reporter=self.request.user)
 
 
 class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
