@@ -8,6 +8,8 @@ class Permission(models.Model):
     def __str__(self):
         return self.name
 
+class CustomUser(AbstractUser):
+    permissions = models.ManyToManyField(Permission, blank=True)
 # Custom user model
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
