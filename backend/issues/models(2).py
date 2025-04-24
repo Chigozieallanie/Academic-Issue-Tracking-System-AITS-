@@ -57,3 +57,15 @@ class Lecturer(models.Model):
 
     def __str__(self):
         return f"{self.user.username} ({self.staff_id})"
+    
+class Registrar(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        limit_choices_to={'user_type': 'registrar'}
+    )
+    employee_id = models.CharField(max_length=20, unique=True)
+    
+    def __str__(self):
+        return f"{self.user.username} ({self.employee_id})"
