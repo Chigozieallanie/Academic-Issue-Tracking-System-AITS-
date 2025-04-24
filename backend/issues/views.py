@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserProfileSerializer
+from .serializers import UserProfileSerializer,UserRegistrationSerializer, UserSerializer 
 from django.contrib.auth import get_user_model
 from .models import StudentProfile, LecturerProfile, RegistrarProfile
 from django.contrib.auth import logout
