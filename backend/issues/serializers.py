@@ -1,233 +1,323 @@
-from rest_framework import serializers
-from rest_framework.authtoken.models import Token
-from django.contrib.auth import get_user_model
-from django.contrib.auth.password_validation import validate_password
-from rest_framework.validators import UniqueValidator
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth import authenticate
-from .models import (
-    Issue,
-    CustomUser,
-    StudentProfile,
-    LecturerProfile,
-    RegistrarProfile,
-    Course,
-    Enrollment,
-    Mentorship,
-    Comment,
-    CourseMaterial,
-    Attendance
-)
+from rest_framework import generics, status, viewsets
+from .models import Issue, StudentProfile as Student, CustomUser, LecturerProfile
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 
+from django.contrib.auth import authenticate
+from rest_framework import permissions
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+
+from django.contrib.auth import get_user_model
+from .models import StudentProfile, LecturerProfile, RegistrarProfile
+from django.contrib.auth import logout
+
+from rest_framework.pagination import PageNumberPagination
+from .permissions import IsRole, IsOwnerOrReadOnly
 from .models import Notification
 
+from django.core.mail import send_mail
+from django.conf import settings
+from rest_framework import serializers
 
 User = get_user_model()
 
 
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Issue
-        fields = '__all__'
-
-
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        required=True,
-        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
-    )
-    password = serializers.CharField(
-        write_only=True, 
-        required=True, 
-        validators=[validate_password]
-    )
-    password2 = serializers.CharField(write_only=True, required=True)
-    role = serializers.ChoiceField(choices=CustomUser.USER_ROLE_CHOICES)
-
-    # Student fields (only required if role=student)
-    student_id = serializers.CharField(required=False, allow_blank=True)
-    program = serializers.CharField(required=False, allow_blank=True)
-    year_of_study = serializers.IntegerField(
-        required=False,
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
-    )
-
-    # Lecturer fields (only required if role=lecturer)
-    staff_id = serializers.CharField(required=False, allow_blank=True)
-    department = serializers.CharField(required=False, allow_blank=True)
-    specialization = serializers.CharField(required=False, allow_blank=True)
-
-    # Registrar fields (only required if role=registrar)
-    office = serializers.CharField(required=False, allow_blank=True)
-    contact_info = serializers.CharField(required=False, allow_blank=True)
-
-    class Meta:
-        model = CustomUser
-        fields = [
-            'username', 'email', 'password', 'password2', 'role',
-            'first_name', 'last_name',
-            'student_id', 'program', 'year_of_study',
-            'staff_id', 'department', 'specialization',
-            'office', 'contact_info'
-        ]
+        model = Issue  
+        fields = ['id', 'title', 'description', 'status', 'owner', 'lecturer', 'created_at', 'updated_at']
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Passwords do not match."})
+        # Validate status
+        if 'status' in attrs and attrs['status'] not in ['open', 'pending', 'assigned', 'resolved', 'closed']:
+            raise serializers.ValidationError({"status": "Invalid status."})
 
-        role = attrs['role']
-        if role == CustomUser.STUDENT:
-            if not all([attrs.get('student_id'), attrs.get('program'), attrs.get('year_of_study')]):
-                raise serializers.ValidationError(
-                    "Student ID, program, and year of study are required for students."
-                )
-        elif role == CustomUser.LECTURER:
-            if not all([attrs.get('staff_id'), attrs.get('department'), attrs.get('specialization')]):
-                raise serializers.ValidationError(
-                    "Staff ID, department, and specialization are required for lecturers."
-                )
-        elif role == CustomUser.REGISTRAR:
-            if not all([attrs.get('office'), attrs.get('contact_info')]):
-                raise serializers.ValidationError(
-                    "Office and contact info are required for registrars."
-                )
+        # Validate title - ensure it's not empty and has a minimum length
+        if 'title' in attrs and len(attrs['title']) < 5:
+            raise serializers.ValidationError({"title": "Title must be at least 5 characters long."})
+
+        # Validate description - ensure it's not empty
+        if 'description' in attrs and len(attrs['description']) < 10:
+            raise serializers.ValidationError({"description": "Description must be at least 10 characters long."})
+
+        # Validate owner - ensure the owner is not null or invalid
+        if 'owner' in attrs and not attrs['owner']:
+            raise serializers.ValidationError({"owner": "Owner must be provided."})
+
+        # Validate lecturer - ensure the lecturer is assigned when status is 'assigned'
+        if 'lecturer' in attrs and attrs.get('status') == 'assigned' and not attrs['lecturer']:
+            raise serializers.ValidationError({"lecturer": "Lecturer must be assigned if status is 'assigned'."})
+
         return attrs
 
-    def create(self, validated_data):
-        role = validated_data.pop('role')
-        profile_data = {}
+    # Additional field-specific validation can also be added if needed
+    def validate_status(self, value):
+        if value not in ['open', 'pending', 'assigned', 'resolved', 'closed']:
+            raise serializers.ValidationError("Invalid status.")
+        return value
 
-        if role == CustomUser.STUDENT:
-            profile_data = {
-                'student_id': validated_data.pop('student_id'),
-                'program': validated_data.pop('program'),
-                'year_of_study': validated_data.pop('year_of_study')
-            }
-        elif role == CustomUser.LECTURER:
-            profile_data = {
-                'staff_id': validated_data.pop('staff_id'),
-                'department': validated_data.pop('department'),
-                'specialization': validated_data.pop('specialization')
-            }
-        elif role == CustomUser.REGISTRAR:
-            profile_data = {
-                'office': validated_data.pop('office'),
-                'contact_info': validated_data.pop('contact_info')
-            }
+    def validate_title(self, value):
+        if len(value) < 5:
+            raise serializers.ValidationError("Title must be at least 5 characters long.")
+        return value
 
-        password = validated_data.pop('password')
-        validated_data.pop('password2')
+    def validate_description(self, value):
+        if len(value) < 10:
+            raise serializers.ValidationError("Description must be at least 10 characters long.")
+        return value
 
-        user = CustomUser.objects.create(**validated_data, role=role)
-        user.set_password(password)
-        user.save()
-
-        if role == CustomUser.STUDENT:
-            StudentProfile.objects.create(user=user, **profile_data)
-        elif role == CustomUser.LECTURER:
-            LecturerProfile.objects.create(user=user, **profile_data)
-        elif role == CustomUser.REGISTRAR:
-            RegistrarProfile.objects.create(user=user, **profile_data)
-
-        Token.objects.create(user=user)
-        return user
-
+class IsRegistrarRole(IsRole):
+    allowed_roles = ['registrar']
 
 class StudentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentProfile
-        fields = ('student_id', 'program', 'year_of_study')
+        fields = '__all__'  
 
+
+
+class StudentProfileViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentProfileSerializer
+    permission_classes = [IsRegistrarRole]
+
+    def perform_create(self, serializer):
+        if self.request.user.role == 'registrar':
+            serializer.save()
+        else:
+            serializer.save(user=self.request.user)
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 10            
 
 class LecturerProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LecturerProfile
-        fields = ('staff_id', 'department', 'specialization')
+        model = LecturerProfile  
+        fields = '__all__'
+
+    def get_issues(self, obj):
+        from .serializers import IssueSerializer  # local import to avoid circular import issues
+        issues = Issue.objects.filter(lecturer=obj)
+        return IssueSerializer(issues, many=True).data
+
+
+
+
+
 
 
 class RegistrarProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RegistrarProfile
-        fields = ('office', 'contact_info')
+        model = RegistrarProfile 
+        fields = '__all__'
+
+
+class IssueListCreateView(generics.ListCreateAPIView):
+    queryset = Issue.objects.all()
+    serializer_class = IssueSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = CustomPagination
+
+
+class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = IssueSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+
+    def get_queryset(self):
+        return Issue.objects.all()
+
+    def perform_update(self, serializer):
+        issue = self.get_object()
+        # Before updating, send notification if the status is changed
+        old_status = issue.status
+        new_status = serializer.validated_data.get('status', issue.status)
+
+        if old_status != new_status:
+            self.send_status_update_email(issue, old_status, new_status)
+        
+        serializer.save()
+
+    def send_status_update_email(self, issue, old_status, new_status):
+        # Email notification logic here
+        subject = f"Issue Status Updated: {issue.title}"
+        message = f"The status of the issue '{issue.title}' has been updated from '{old_status}' to '{new_status}'."
+        
+        # Send email to the owner (Student)
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [issue.owner.email]
+        )
+        
+        # Send email to the lecturer if available
+        if issue.lecturer:
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [issue.lecturer.email]
+            )
+
+
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password2 = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'password2', 'role', 'first_name', 'last_name']
+    
+    def validate(self, attrs):
+        password = attrs.get('password')
+        password2 = attrs.get('password2')
+
+        if password != password2:
+            raise serializers.ValidationError("Passwords must match.")
+
+        return attrs
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User.objects.create_user(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+
+
+
+class UserRegistrationView(APIView):
+    permission_classes = []  # Allow anyone to access
+
+    def get(self, request):
+        """Provide registration form information"""
+        return Response({
+            "message": "Send POST request with user data to register",
+            "required_fields": {
+                "username": "string",
+                "email": "string",
+                "password": "string",
+                "password2": "string",
+                "role": "student|lecturer|registrar",
+                "first_name": "string",
+                "last_name": "string"
+            }
+        })
+
+    def post(self, request):
+        """Handle user registration"""
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                user = serializer.save()
+                return Response({
+                    "status": "success",
+                    "user": {
+                        "id": user.id,
+                        "username": user.username,
+                        "role": user.role
+                    }
+                }, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                return Response({
+                    "status": "error",
+                    "errors": str(e)
+                }, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            "status": "error",
+            "errors": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(
-        write_only=True,
-        required=True,
-        style={'input_type': 'password'}
-    )
-
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+    user = serializers.CharField(read_only=True)  # Add read-only user field for easier response
+    
     def validate(self, attrs):
         username = attrs.get('username')
         password = attrs.get('password')
 
-        if username and password:
-            user = authenticate(request=self.context.get('request'),
-                                username=username,
-                                password=password)
-            if not user:
-                raise serializers.ValidationError("Unable to log in with provided credentials.")
-        else:
-            raise serializers.ValidationError("Must include 'username' and 'password'.")
+        if not username or not password:
+            raise serializers.ValidationError('Both username and password are required.')
+
+        user = authenticate(username=username, password=password)
+
+        if not user:
+            raise serializers.ValidationError('Invalid credentials.')
 
         attrs['user'] = user
         return attrs
 
 
+class UserLoginView(APIView):
+    serializer_class = UserLoginSerializer
+    permission_classes = []
+
+    def post(self, request):
+        # Validate the incoming data
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+
+        # Get the validated user from the serializer
+        user = serializer.validated_data['user']
+
+        # Create the JWT token
+        refresh = RefreshToken.for_user(user)
+
+        # Access and refresh tokens
+        access_token = str(refresh.access_token)
+        refresh_token = str(refresh)
+
+        return Response({
+            'access_token': access_token,
+            'refresh_token': refresh_token,
+            'user_id': user.pk,
+            'username': user.username,
+            'role': user.role
+        }, status=status.HTTP_200_OK)
+
+
+class UserLogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        logout(request)
+        return Response(
+            status=status.HTTP_204_NO_CONTENT 
+        )
+    
 class UserProfileSerializer(serializers.ModelSerializer):
-    role_data = serializers.SerializerMethodField()
-
     class Meta:
-        model = CustomUser
-        fields = ['id', 'username', 'email', 'role', 'email_verified', 'requires_profile_setup', 'role_data']
-
-    def get_role_data(self, user):
-        return user.get_role_data()
-
-
-# Added Serializers for the remaining models:
-
-class CourseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = '__all__'
-
-
-class EnrollmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Enrollment
-        fields = '__all__'
-
-
-class MentorshipSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Mentorship
-        fields = '__all__'
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = '__all__'
-
-
-class CourseMaterialSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CourseMaterial
-        fields = '__all__'
-
-
-class AttendanceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Attendance
-        fields = '__all__'
+        model = User
+        fields = ['id', 'username', 'email', 'role', 'first_name', 'last_name']
 
 
 
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data)
+    
 
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Notification
-        fields = ['id', 'message', 'is_read', 'created_at']        
+        model = Notification  
+        fields = '__all__'  
+
+
+
+class NotificationListView(generics.ListAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = CustomPagination  
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('-created_at')
