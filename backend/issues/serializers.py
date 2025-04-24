@@ -1,4 +1,4 @@
-from rest_framework import generics, status, viewsets
+from rest_framework import generics, status, viewsets, serializers
 from .models import Issue, StudentProfile as Student, CustomUser, LecturerProfile
 from rest_framework.response import Response
 from rest_framework.views import APIView
