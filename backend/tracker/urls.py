@@ -37,7 +37,6 @@ urlpatterns = [
 
     path('api/users/me/', UserDetailView.as_view(), name='user-detail'),
     path('api/users/<int:pk>/', UserDetailView.as_view(), name='user-update-delete'),
-]
     path('api/', include('issues.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
