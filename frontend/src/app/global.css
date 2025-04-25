@@ -1,7 +1,7 @@
 :root {
     --background: hsl(0, 0%, 100%);
     --foreground: hsl(0, 0%, 10%);
-    --card: hsl(0, 0%, 100%);
+    --card: #ffffff;
     --card-foreground: hsl(0, 0%, 10%);
     --popover: hsl(0, 0%, 100%);
     --popover-foreground: hsl(0, 0%, 10%);
@@ -13,7 +13,7 @@
     --muted-foreground: hsl(0, 0%, 40%);
     --accent: hsl(142, 33%, 90%);
     --accent-foreground: hsl(142, 76%, 36%);
-    --destructive: hsl(0, 84%, 60%);
+    --destructive: hsl(115, 84%, 60%);
     --destructive-foreground: hsl(0, 0%, 100%);
     --border: hsl(0, 0%, 85%);
     --input: hsl(0, 0%, 80%);
@@ -36,7 +36,7 @@
     --muted-foreground: hsl(0, 0%, 60%);
     --accent: hsl(142, 33%, 20%);
     --accent-foreground: hsl(0, 0%, 98%);
-    --destructive: hsl(0, 84%, 60%);
+    --destructive: hsl(128, 84%, 60%);
     --destructive-foreground: hsl(0, 0%, 98%);
     --border: hsl(0, 0%, 20%);
     --input: hsl(0, 0%, 20%);
