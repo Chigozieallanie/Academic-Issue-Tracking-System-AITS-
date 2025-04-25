@@ -26,13 +26,14 @@ from .serializers import NotificationSerializer
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework.permissions import AllowAny
+from rest_framework import serializers
+from rest_framework.exceptions import PermissionDenied
+from .models import Issue
 
 User = get_user_model()
 
-
 class IsRegistrarRole(IsRole):
     allowed_roles = ['registrar']
-
 
 class StudentProfileViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
@@ -45,10 +46,8 @@ class StudentProfileViewSet(viewsets.ModelViewSet):
         else:
             serializer.save(user=self.request.user)
 
-
 class CustomPagination(PageNumberPagination):
     page_size = 10
-
 
 class IssueListCreateView(generics.ListCreateAPIView):
     serializer_class = IssueSerializer
@@ -61,7 +60,6 @@ class IssueListCreateView(generics.ListCreateAPIView):
             return Issue.objects.filter(owner=user)
         return Issue.objects.all()
 
-
 class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
@@ -71,7 +69,18 @@ class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         issue = self.get_object()
-        # Before updating, send notification if the status is changed
+        user = self.request.user
+
+        # Enforce that lecturers can only resolve issues assigned to them
+        if user.role == 'lecturer':
+            if issue.lecturer != user:
+                raise PermissionDenied("You are not assigned to this issue.")
+            # Optionally restrict which fields they can update
+            new_status = serializer.validated_data.get('status')
+            if new_status and new_status not in ['resolved', 'closed']:
+                raise PermissionDenied("Lecturers can only resolve or close issues assigned to them.")
+
+        # Registrars or owners can still do full updates
         old_status = issue.status
         new_status = serializer.validated_data.get('status', issue.status)
 
@@ -101,7 +110,6 @@ class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 settings.DEFAULT_FROM_EMAIL,
                 [issue.lecturer.user.email]
             )
-
 
 class UserRegistrationView(APIView):
     permission_classes = []  # Allow anyone to access
@@ -145,7 +153,6 @@ class UserRegistrationView(APIView):
             "errors": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
 
-
 class UserLoginView(APIView):
     serializer_class = UserLoginSerializer
     permission_classes = [AllowAny]
@@ -173,7 +180,6 @@ class UserLoginView(APIView):
             'role': user.role
         }, status=status.HTTP_200_OK)
 
-
 class UserLogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -183,7 +189,6 @@ class UserLogoutView(APIView):
             status=status.HTTP_204_NO_CONTENT
         )
 
-
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -191,7 +196,6 @@ class UserProfileView(APIView):
         user = request.user
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
-
 
 class NotificationListView(generics.ListAPIView):
     serializer_class = NotificationSerializer
