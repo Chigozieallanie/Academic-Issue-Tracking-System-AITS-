@@ -37,6 +37,8 @@ const styles = {
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     padding: "20px",
     textAlign: "center",
+    opacity: "0.8", 
+    zIndex: "1", 
   },
   roleContainer: { // New style for the Select Role container
     backgroundColor: "rgba(255, 255, 255, 0.9)", // Semi-transparent white background
