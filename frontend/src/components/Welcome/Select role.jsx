@@ -8,16 +8,14 @@ const RoleSelection = () => {
         <h1 style={styles.title}>Select Your Role</h1>
         
         <div style={styles.buttonContainer}>
-
-            <link to="/signup"> 
-          <button style={styles.button}>Register as Student</button>
-          </link>
-
-          <Link to="/RegistraSignup">
-          <button style={styles.button}>Register as Lecturer</button>
+        <Link to="/signup" style={styles.link}>
+            <button style={styles.button}>Register as Student</button>
           </Link>
-          <Link to="/RegistraSignup">
-          <button style={styles.button}>Register as Academic Registrar</button>
+          <Link to="/signup/" style={styles.link}>
+            <button style={styles.button}>Register as Lecturer</button>
+          </Link>
+          <Link to="/signup/" style={styles.link}>
+            <button style={styles.button}>Register as Academic Registrar</button>
           </Link>
         </div>
         
