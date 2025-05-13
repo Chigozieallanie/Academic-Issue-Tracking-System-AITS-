@@ -11,7 +11,7 @@ function Welcome() {
         <div className="welcome-auth-buttons">
           <p className="role-selection-text">Please click here to proceed:</p>
           <div className="role-buttons">
-            <Link to="/Registra signup">
+            <Link to="/Select role">
               <button className="role-button">Proceed</button>
             </Link>
           </div>

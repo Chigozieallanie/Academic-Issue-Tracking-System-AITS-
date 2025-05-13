@@ -29,7 +29,7 @@ function App() {
         <Route path="/registralogin" element={<RegistraLogin />} />
         <Route path="/registradashboard" element={<Registradashboard />} />
         <Route path="/verificationcode" element={<Verificationcode />} />
-        <Route path="/role-selection" element={<RoleSelection />} />
+        <Route path="/Select role" element={<RoleSelection />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/signup" element={<Signup />} />
