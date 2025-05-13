@@ -1,25 +1,24 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { AtSign, Mail, Phone, Save, User } from "lucide-react"
+import { useState } from "react";
+import "./global.css";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Textarea } from "@/components/ui/textarea"
-import'./global.css';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function ProfilePage() {
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // In a real app, you would update the profile in the backend
-    setIsEditing(false)
-    alert("Profile updated successfully!")
-  }
+    setIsEditing(false);
+    alert("Profile updated successfully!");
+  };
 
   return (
     <div className="space-y-6">
@@ -60,46 +59,34 @@ export default function ProfilePage() {
 
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="name"
-                    placeholder="Dr. John Smith"
-                    className="pl-10"
-                    defaultValue="Dr. John Smith"
-                    disabled={!isEditing}
-                  />
-                </div>
+                <Input
+                  id="name"
+                  placeholder="Dr. John Smith"
+                  defaultValue="Dr. John Smith"
+                  disabled={!isEditing}
+                />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <AtSign className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="john.smith@university.edu"
-                    className="pl-10"
-                    defaultValue="john.smith@university.edu"
-                    disabled={!isEditing}
-                  />
-                </div>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="john.smith@university.edu"
+                  defaultValue="john.smith@university.edu"
+                  disabled={!isEditing}
+                />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+1 (555) 123-4567"
-                    className="pl-10"
-                    defaultValue="+1 (555) 123-4567"
-                    disabled={!isEditing}
-                  />
-                </div>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="+1 (555) 123-4567"
+                  defaultValue="+1 (555) 123-4567"
+                  disabled={!isEditing}
+                />
               </div>
 
               <div className="space-y-2">
@@ -129,10 +116,7 @@ export default function ProfilePage() {
                   <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>
                     Cancel
                   </Button>
-                  <Button type="submit" className="gap-1">
-                    <Save className="h-4 w-4" />
-                    Save Changes
-                  </Button>
+                  <Button type="submit">Save Changes</Button>
                 </>
               ) : (
                 <Button type="button" onClick={() => setIsEditing(true)}>
@@ -153,7 +137,7 @@ export default function ProfilePage() {
               <h3 className="font-medium">Email Notifications</h3>
               <div className="flex items-center space-x-2">
                 <div className="rounded-full bg-primary/10 p-2">
-                  <Mail className="h-4 w-4 text-primary" />
+                  <span className="icon-placeholder">📧</span>
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium">New Issue Notifications</p>
@@ -194,5 +178,5 @@ export default function ProfilePage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

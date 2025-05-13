@@ -1,6 +1,7 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-from .models import Issue, Comment, Notification
+from .models import Issue, Comment, Notification, CustomUser
+from django.contrib.auth.models import Permission
 from django.core.mail import send_mail
 
 
@@ -85,3 +86,7 @@ def notify_lecturer_on_assignment(sender, instance, created, **kwargs):
             recipient_list=[instance.assigned_to.email],
             fail_silently=False
         )            
+@receiver(post_save, sender=CustomUser)
+def assign_default_permissions(sender, instance, created, **kwargs):
+    if created and instance.user_type == 'student':
+        instance.permissions.add(Permission.objects.get(name='issue:create'))

@@ -1,9 +1,7 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { BarChart, CheckSquare, ClipboardList, HelpCircle, Home, LogOut, Settings, User } from "lucide-react"
-import'./global.css';
+import { Link, useLocation } from "react-router-dom";
+import "./global.css";
 
 import {
   Sidebar,
@@ -15,21 +13,21 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 export function DashboardSidebar({ children }) {
-  const pathname = usePathname()
+  const location = useLocation();
 
   const isActive = (path) => {
-    return pathname === path
-  }
+    return location.pathname === path;
+  };
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen">
         <Sidebar className="bg-black text-white">
           <SidebarHeader className="border-b border-white/10 px-6 py-3 bg-primary">
-            <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
+            <Link to="/dashboard" className="flex items-center gap-2 font-semibold">
               <span className="text-white text-xl">AcadTrack</span>
             </Link>
           </SidebarHeader>
@@ -41,8 +39,8 @@ export function DashboardSidebar({ children }) {
                   isActive={isActive("/dashboard")}
                   className="hover:bg-white/10 data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
-                  <Link href="/dashboard">
-                    <Home className="h-5 w-5" />
+                  <Link to="/dashboard">
+                    <span className="h-5 w-5">🏠</span>
                     <span>Dashboard</span>
                   </Link>
                 </SidebarMenuButton>
@@ -53,8 +51,8 @@ export function DashboardSidebar({ children }) {
                   isActive={isActive("/dashboard/issues")}
                   className="hover:bg-white/10 data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
-                  <Link href="/dashboard/issues">
-                    <ClipboardList className="h-5 w-5" />
+                  <Link to="/dashboard/issues">
+                    <span className="h-5 w-5">📋</span>
                     <span>All Issues</span>
                   </Link>
                 </SidebarMenuButton>
@@ -65,8 +63,8 @@ export function DashboardSidebar({ children }) {
                   isActive={isActive("/dashboard/assigned")}
                   className="hover:bg-white/10 data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
-                  <Link href="/dashboard/assigned">
-                    <CheckSquare className="h-5 w-5" />
+                  <Link to="/dashboard/assigned">
+                    <span className="h-5 w-5">✅</span>
                     <span>Assigned to Me</span>
                   </Link>
                 </SidebarMenuButton>
@@ -77,8 +75,8 @@ export function DashboardSidebar({ children }) {
                   isActive={isActive("/dashboard/analytics")}
                   className="hover:bg-white/10 data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
-                  <Link href="/dashboard/analytics">
-                    <BarChart className="h-5 w-5" />
+                  <Link to="/dashboard/analytics">
+                    <span className="h-5 w-5">📊</span>
                     <span>Analytics</span>
                   </Link>
                 </SidebarMenuButton>
@@ -89,8 +87,8 @@ export function DashboardSidebar({ children }) {
                   isActive={isActive("/dashboard/help")}
                   className="hover:bg-white/10 data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
-                  <Link href="/dashboard/help">
-                    <HelpCircle className="h-5 w-5" />
+                  <Link to="/dashboard/help">
+                    <span className="h-5 w-5">❓</span>
                     <span>Help & Support</span>
                   </Link>
                 </SidebarMenuButton>
@@ -105,8 +103,8 @@ export function DashboardSidebar({ children }) {
                   isActive={isActive("/dashboard/profile")}
                   className="hover:bg-white/10 data-[active=true]:bg-black data-[active=true]:text-white"
                 >
-                  <Link href="/dashboard/profile">
-                    <User className="h-5 w-5" />
+                  <Link to="/dashboard/profile">
+                    <span className="h-5 w-5">👤</span>
                     <span>Profile</span>
                   </Link>
                 </SidebarMenuButton>
@@ -117,16 +115,16 @@ export function DashboardSidebar({ children }) {
                   isActive={isActive("/dashboard/settings")}
                   className="hover:bg-white/10 data-[active=true]:bg-black data-[active=true]:text-white"
                 >
-                  <Link href="/dashboard/settings">
-                    <Settings className="h-5 w-5" />
+                  <Link to="/dashboard/settings">
+                    <span className="h-5 w-5">⚙️</span>
                     <span>Settings</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild className="hover:bg-white/10 text-white hover:text-white">
-                  <Link href="/login">
-                    <LogOut className="h-5 w-5" />
+                  <Link to="/login">
+                    <span className="h-5 w-5">🚪</span>
                     <span>Logout</span>
                   </Link>
                 </SidebarMenuButton>
@@ -150,5 +148,5 @@ export function DashboardSidebar({ children }) {
         </div>
       </div>
     </SidebarProvider>
-  )
+  );
 }

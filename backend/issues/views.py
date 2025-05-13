@@ -4,11 +4,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import IssueSerializer
+# from utils.permissions import HasPermission  # Removed as it could not be resolved
 from django.contrib.auth import authenticate
 from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserProfileSerializer
+from .serializers import UserProfileSerializer,UserRegistrationSerializer, UserSerializer 
 from django.contrib.auth import get_user_model
 from .models import StudentProfile, LecturerProfile, RegistrarProfile
 from django.contrib.auth import logout
@@ -25,14 +26,15 @@ from .models import Notification
 from .serializers import NotificationSerializer
 from django.core.mail import send_mail
 from django.conf import settings
-
+from rest_framework.permissions import AllowAny
+from rest_framework import serializers
+from rest_framework.exceptions import PermissionDenied
+from .models import Issue
 
 User = get_user_model()
 
-
 class IsRegistrarRole(IsRole):
     allowed_roles = ['registrar']
-
 
 class StudentProfileViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
@@ -45,16 +47,20 @@ class StudentProfileViewSet(viewsets.ModelViewSet):
         else:
             serializer.save(user=self.request.user)
 
-
 class CustomPagination(PageNumberPagination):
-    page_size = 10            
-
+    page_size = 10
 
 class IssueListCreateView(generics.ListCreateAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = CustomPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'student':
+            return Issue.objects.filter(owner=user)
+        return Issue.objects.all()
 
 
 class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
@@ -66,20 +72,31 @@ class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         issue = self.get_object()
-        # Before updating, send notification if the status is changed
+        user = self.request.user
+
+        # Enforce that lecturers can only resolve issues assigned to them
+        if user.role == 'lecturer':
+            if issue.lecturer != user:
+                raise PermissionDenied("You are not assigned to this issue.")
+            # Optionally restrict which fields they can update
+            new_status = serializer.validated_data.get('status')
+            if new_status and new_status not in ['resolved', 'closed']:
+                raise PermissionDenied("Lecturers can only resolve or close issues assigned to them.")
+
+        # Registrars or owners can still do full updates
         old_status = issue.status
         new_status = serializer.validated_data.get('status', issue.status)
 
         if old_status != new_status:
             self.send_status_update_email(issue, old_status, new_status)
-        
+
         serializer.save()
 
     def send_status_update_email(self, issue, old_status, new_status):
         # Email notification logic here
         subject = f"Issue Status Updated: {issue.title}"
         message = f"The status of the issue '{issue.title}' has been updated from '{old_status}' to '{new_status}'."
-        
+
         # Send email to the owner (Student)
         send_mail(
             subject,
@@ -87,20 +104,22 @@ class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             settings.DEFAULT_FROM_EMAIL,
             [issue.owner.email]
         )
-        
+
         # Send email to the lecturer if available
         if issue.lecturer:
             send_mail(
                 subject,
                 message,
                 settings.DEFAULT_FROM_EMAIL,
-                [issue.lecturer.email]
+                [issue.lecturer.user.email]
             )
 
 
-class UserRegistrationView(APIView):
+class UserRegistrationView(generics.CreateAPIView):
     permission_classes = []  # Allow anyone to access
-
+    queryset = User.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = UserRegistrationSerializer
     def get(self, request):
         """Provide registration form information"""
         return Response({
@@ -115,6 +134,11 @@ class UserRegistrationView(APIView):
                 "last_name": "string"
             }
         })
+    def get_object(self):
+        # If 'me' endpoint, return current user
+        if self.kwargs.get('pk') == 'me':
+            return self.request.user
+        return super().get_object()
 
     def post(self, request):
         """Handle user registration"""
@@ -140,10 +164,9 @@ class UserRegistrationView(APIView):
             "errors": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
 
-
 class UserLoginView(APIView):
     serializer_class = UserLoginSerializer
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def post(self, request):
         # Validate the incoming data
@@ -168,16 +191,14 @@ class UserLoginView(APIView):
             'role': user.role
         }, status=status.HTTP_200_OK)
 
-
 class UserLogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         logout(request)
         return Response(
-            status=status.HTTP_204_NO_CONTENT 
+            status=status.HTTP_204_NO_CONTENT
         )
-
 
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
@@ -187,11 +208,10 @@ class UserProfileView(APIView):
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
 
-
 class NotificationListView(generics.ListAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [permissions.IsAuthenticated]
-    pagination_class = CustomPagination  
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         return Notification.objects.filter(user=self.request.user).order_by('-created_at')

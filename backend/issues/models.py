@@ -162,22 +162,6 @@ class Course(models.Model):
     lecturer = models.ForeignKey('issues.LecturerProfile', on_delete=models.CASCADE)
     students = models.ManyToManyField('issues.StudentProfile', related_name='courses')
 
-
-class Enrollment(models.Model):
-    student = models.ForeignKey('issues.StudentProfile', on_delete=models.CASCADE)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
-    semester = models.CharField(max_length=20)
-    grade = models.CharField(max_length=10, blank=True, null=True)
-
-
-class Mentorship(models.Model):
-    mentor = models.ForeignKey('issues.LecturerProfile', on_delete=models.CASCADE)
-    mentee = models.ForeignKey('issues.StudentProfile', on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField(blank=True, null=True)
-    status = models.CharField(max_length=10, default='active')
-
-
 class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

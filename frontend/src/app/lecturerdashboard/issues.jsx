@@ -1,49 +1,47 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
-import { ArrowLeft, CheckCircle2, Clock, HelpCircle, Paperclip, Send, XCircle } from "lucide-react"
+import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import "./global.css";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
-import'./global.css';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function IssueDetailPage() {
-  const params = useParams()
-  const router = useRouter()
-  const issueId = params.id
+  const params = useParams();
+  const navigate = useNavigate();
+  const issueId = params.id;
 
   // Find the issue from our mock data
-  const issue = assignedIssues.find((i) => i.id === issueId)
+  const issue = assignedIssues.find((i) => i.id === issueId);
 
-  const [message, setMessage] = useState("")
+  const [message, setMessage] = useState("");
 
   if (!issue) {
     return (
       <div className="flex h-[80vh] flex-col items-center justify-center">
         <h1 className="text-2xl font-bold">Issue not found</h1>
         <p className="text-muted-foreground">The issue you are looking for does not exist.</p>
-        <Button className="mt-4" onClick={() => router.back()}>
+        <Button className="mt-4" onClick={() => navigate(-1)}>
           Go Back
         </Button>
       </div>
-    )
+    );
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // In a real app, you would send the message to the backend
-    alert(`Message sent: ${message}`)
-    setMessage("")
-  }
+    alert(`Message sent: ${message}`);
+    setMessage("");
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={() => router.back()}>
-          <ArrowLeft className="h-4 w-4" />
+        <Button variant="outline" size="icon" onClick={() => navigate(-1)}>
+          <span className="icon-placeholder">←</span>
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{issue.title}</h1>
@@ -71,7 +69,7 @@ export default function IssueDetailPage() {
               <h3 className="font-medium">Attachments</h3>
               <div className="mt-2 flex items-center gap-2">
                 <div className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
-                  <Paperclip className="h-4 w-4 text-muted-foreground" />
+                  <span className="icon-placeholder">📎</span>
                   <span>exam_answers.pdf</span>
                 </div>
               </div>
@@ -83,12 +81,12 @@ export default function IssueDetailPage() {
             {issue.status !== "resolved" && issue.status !== "rejected" && (
               <>
                 <Button variant="outline" className="gap-1">
-                  <XCircle className="h-4 w-4" />
+                  <span className="icon-placeholder">❌</span>
                   Reject
                 </Button>
-                <Link href={`/dashboard/issues/${issue.id}/resolve`}>
+                <Link to={`/dashboard/issues/${issue.id}/resolve`}>
                   <Button className="gap-1">
-                    <CheckCircle2 className="h-4 w-4" />
+                    <span className="icon-placeholder">✅</span>
                     Resolve
                   </Button>
                 </Link>
@@ -134,43 +132,43 @@ export default function IssueDetailPage() {
               className="min-h-[80px]"
             />
             <Button type="submit" size="icon" className="h-10 w-10 shrink-0">
-              <Send className="h-4 w-4" />
+              <span className="icon-placeholder">📤</span>
             </Button>
           </form>
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }
 
 function StatusBadge({ status }) {
   const statusConfig = {
     pending: {
       color: "bg-yellow-100 text-yellow-800",
-      icon: Clock,
+      icon: "⏳",
     },
     "in-progress": {
       color: "bg-blue-100 text-blue-800",
-      icon: HelpCircle,
+      icon: "🔄",
     },
     resolved: {
       color: "bg-green-100 text-green-800",
-      icon: CheckCircle2,
+      icon: "✅",
     },
     rejected: {
       color: "bg-red-100 text-red-800",
-      icon: XCircle,
+      icon: "❌",
     },
-  }
+  };
 
-  const { color, icon: Icon } = statusConfig[status]
+  const { color, icon } = statusConfig[status];
 
   return (
     <div className={`flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${color}`}>
-      <Icon className="h-3 w-3" />
+      <span>{icon}</span>
       <span>{status.charAt(0).toUpperCase() + status.slice(1).replace("-", " ")}</span>
     </div>
-  )
+  );
 }
 
 const assignedIssues = [
@@ -225,7 +223,7 @@ const assignedIssues = [
     status: "rejected",
     description: "Student is requesting special accommodations for the final exam due to a learning disability.",
   },
-]
+];
 
 const messages = [
   {
@@ -250,4 +248,4 @@ const messages = [
       "I've reviewed question 3 and I see the issue. You're right that your answer should have received partial credit. I'm still looking at the other questions.",
     time: "30 minutes ago",
   },
-]
+];
