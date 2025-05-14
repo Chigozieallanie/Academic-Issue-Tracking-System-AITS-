@@ -1,5 +1,15 @@
 from rest_framework import permissions
+from rest_framework.permissions import BasePermission
+from .models import User
 
+
+class HasPermission(BasePermission):
+    def has_permission(self, request, view):
+        required_permission = getattr(view, 'required_permission', None)
+        if not required_permission:
+            return False
+        return request.user.permissions.filter(name=required_permission).exists()
+    
 class IsRole(permissions.BasePermission):
     """
     Custom base permission class to handle role-based permission checks.
