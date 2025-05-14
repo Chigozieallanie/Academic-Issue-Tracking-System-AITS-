@@ -1,43 +1,42 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Mail } from "lucide-react"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./global.css";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export default function VerifyPage() {
-  const router = useRouter()
-  const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""])
+  const navigate = useNavigate();
+  const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""]);
 
   const handleChange = (index, value) => {
-    if (value.length > 1) return
+    if (value.length > 1) return;
 
-    const newCode = [...verificationCode]
-    newCode[index] = value
-    setVerificationCode(newCode)
+    const newCode = [...verificationCode];
+    newCode[index] = value;
+    setVerificationCode(newCode);
 
     // Auto-focus next input
     if (value && index < 5) {
-      const nextInput = document.getElementById(`code-${index + 1}`)
-      if (nextInput) nextInput.focus()
+      const nextInput = document.getElementById(`code-${index + 1}`);
+      if (nextInput) nextInput.focus();
     }
-  }
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // In a real app, you would verify the code here
     // For demo purposes, we'll just redirect to the dashboard
-    router.push("/dashboard")
-  }
+    navigate("/dashboard");
+  };
 
   const handleResend = () => {
     // In a real app, you would resend the verification code here
-    alert("Verification code resent!")
-  }
+    alert("Verification code resent!");
+  };
 
   return (
     <div className="min-h-screen bg-primary/10 flex items-center justify-center p-4">
@@ -52,7 +51,7 @@ export default function VerifyPage() {
           <CardContent className="space-y-4 pt-6 bg-white">
             <div className="flex justify-center">
               <div className="rounded-full bg-primary p-3">
-                <Mail className="h-6 w-6 text-white" />
+                <span className="text-white text-lg">📧</span>
               </div>
             </div>
             <div className="space-y-2 text-center">
@@ -92,7 +91,7 @@ export default function VerifyPage() {
               Verify
             </Button>
             <div className="text-center text-sm">
-              <Link href="/signup" className="text-primary hover:underline font-medium">
+              <Link to="/signup" className="text-primary hover:underline font-medium">
                 Back to Sign Up
               </Link>
             </div>
@@ -100,5 +99,5 @@ export default function VerifyPage() {
         </form>
       </Card>
     </div>
-  )
+  );
 }

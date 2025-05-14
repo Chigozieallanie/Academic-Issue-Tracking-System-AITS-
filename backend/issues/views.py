@@ -4,11 +4,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import IssueSerializer
+# from utils.permissions import HasPermission  # Removed as it could not be resolved
 from django.contrib.auth import authenticate
 from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserProfileSerializer
+from .serializers import UserProfileSerializer,UserRegistrationSerializer, UserSerializer 
 from django.contrib.auth import get_user_model
 from .models import StudentProfile, LecturerProfile, RegistrarProfile
 from django.contrib.auth import logout
@@ -50,6 +51,7 @@ class CustomPagination(PageNumberPagination):
     page_size = 10
 
 class IssueListCreateView(generics.ListCreateAPIView):
+    queryset = Issue.objects.all()
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = CustomPagination
@@ -59,6 +61,7 @@ class IssueListCreateView(generics.ListCreateAPIView):
         if user.role == 'student':
             return Issue.objects.filter(owner=user)
         return Issue.objects.all()
+
 
 class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = IssueSerializer
@@ -111,9 +114,12 @@ class IssueRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 [issue.lecturer.user.email]
             )
 
-class UserRegistrationView(APIView):
-    permission_classes = []  # Allow anyone to access
 
+class UserRegistrationView(generics.CreateAPIView):
+    permission_classes = []  # Allow anyone to access
+    queryset = User.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = UserRegistrationSerializer
     def get(self, request):
         """Provide registration form information"""
         return Response({
@@ -128,6 +134,11 @@ class UserRegistrationView(APIView):
                 "last_name": "string"
             }
         })
+    def get_object(self):
+        # If 'me' endpoint, return current user
+        if self.kwargs.get('pk') == 'me':
+            return self.request.user
+        return super().get_object()
 
     def post(self, request):
         """Handle user registration"""

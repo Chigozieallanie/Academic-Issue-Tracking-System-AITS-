@@ -17,6 +17,8 @@ import Notifications from "./pages/Notifications";
 import RegistraSignup from "./Registra/Registra signup";
 import RegistraLogin from "./Registra/Registralogin";
 import Registradashboard from "./Registra/Registra pages/Registradashboard"; 
+import RoleSelection from "./components/Welcome/Select role";
+import Sidebar from "./Registra/Registra pages/sidebar";
 
 
 function App() {
@@ -25,9 +27,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/registra signup" element={<RegistraSignup />} />
+        <Route path= "/Sidebar" element={<Sidebar />} />
         <Route path="/registralogin" element={<RegistraLogin />} />
         <Route path="/registradashboard" element={<Registradashboard />} />
         <Route path="/verificationcode" element={<Verificationcode />} />
+        <Route path="/Select role" element={<RoleSelection />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/signup" element={<Signup />} />

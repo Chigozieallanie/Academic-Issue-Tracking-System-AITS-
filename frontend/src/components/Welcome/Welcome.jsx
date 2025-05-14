@@ -9,16 +9,10 @@ function Welcome() {
       <header className="welcome-head">
         <h1>MAK AITS - Your Trusted Academic Issue Tracking System</h1>
         <div className="welcome-auth-buttons">
-          <p className="role-selection-text">Please choose your role to proceed:</p>
+          <p className="role-selection-text">Please click here to proceed:</p>
           <div className="role-buttons">
-            <Link to="/signup">
-              <button className="role-button">Student</button>
-            </Link>
-            <Link to="/lecturer signup">
-              <button className="role-button">Lecturer</button>
-            </Link>
-            <Link to="/Registra signup">
-              <button className="role-button">Registrar</button>
+            <Link to="/Select role">
+              <button className="role-button">Proceed</button>
             </Link>
           </div>
         </div>
