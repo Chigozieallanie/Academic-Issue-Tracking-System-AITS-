@@ -1,44 +1,50 @@
 from django.contrib import admin
-from .models import CustomUser, StudentProfile, LecturerProfile, RegistrarProfile, Issue, Course, Comment, CourseMaterial, Attendance
-from .models import Notification
+from django.contrib.auth.admin import UserAdmin
+from .models import User, Issue, Comment, Notification
 
-# --- Issue admin customization ---
-class IssueAdmin(admin.ModelAdmin):
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        if request.user.role == 'lecturer':
-            return queryset.filter(assigned_to=request.user)
-        return queryset
+class CustomUserAdmin(UserAdmin):
+    model = User
+    list_display = ('username', 'email', 'first_name', 'last_name', 'role', 'college', 'is_staff')
+    list_filter = ('role', 'college', 'is_staff', 'is_active')
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
+        ('Role-specific info', {'fields': ('role', 'student_number', 'college', 'course_units')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'first_name', 'last_name', 'phone_number', 
+                      'password1', 'password2', 'role', 'student_number', 'college', 
+                      'course_units', 'is_staff', 'is_active')}
+        ),
+    )
+    search_fields = ('username', 'email', 'first_name', 'last_name', 'student_number', 'college')
+    ordering = ('username',)
 
-    def get_lecturer(self, obj):
-        return obj.assigned_to.username if obj.assigned_to else "No Lecturer Assigned"
-    get_lecturer.short_description = 'Lecturer'
-
-    list_display = ('title', 'owner', 'get_lecturer', 'status')
-
-
-# --- Inline issues under LecturerProfile ---
-class IssueInline(admin.TabularInline):
-    model = Issue
-    fields = ('title', 'status', 'owner', 'coursecode')
-    readonly_fields = ('title', 'status', 'owner', 'coursecode')
-    can_delete = False
+class CommentInline(admin.TabularInline):
+    model = Comment
     extra = 0
 
-class LecturerProfileAdmin(admin.ModelAdmin):
-    inlines = [IssueInline]
-    list_display = ('user', 'staff_id', 'department', 'specialization')
+class IssueAdmin(admin.ModelAdmin):
+    list_display = ('title', 'created_by', 'assigned_to', 'status', 'created_at', 'updated_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('title', 'description')
+    inlines = [CommentInline]
+    date_hierarchy = 'created_at'
 
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'notification_type', 'issue', 'is_read', 'created_at')
+    list_filter = ('notification_type', 'is_read', 'created_at')
+    search_fields = ('message',)
+    date_hierarchy = 'created_at'
 
-# --- Register models ---
-admin.site.register(CustomUser)
-admin.site.register(StudentProfile)
-admin.site.register(LecturerProfile, LecturerProfileAdmin)
-admin.site.register(RegistrarProfile)
+admin.site.register(User, CustomUserAdmin)
 admin.site.register(Issue, IssueAdmin)
-admin.site.register(Course)
+
 admin.site.register(Comment)
-admin.site.register(CourseMaterial)
-admin.site.register(Attendance)
-admin.site.register(Notification)
+admin.site.register(Notification, NotificationAdmin)
+
 

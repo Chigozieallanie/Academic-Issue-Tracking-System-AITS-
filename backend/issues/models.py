@@ -2,8 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
-# from .models import Issue, StudentProfile as Student, CustomUser
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.conf import settings
 
 
 
@@ -44,7 +46,7 @@ class Issue(models.Model):
         return self.title
 
 class CustomUser(AbstractUser):
-    # Role Choices
+    
     STUDENT = 'student'
     LECTURER = 'lecturer'
     REGISTRAR = 'registrar'
