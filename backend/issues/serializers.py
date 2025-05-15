@@ -140,6 +140,11 @@ class IssueSerializer(serializers.ModelSerializer):
         old_status = instance.status
         old_assigned_to = instance.assigned_to
 
+        # Update the instance
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        instance.save()
 
 
 
