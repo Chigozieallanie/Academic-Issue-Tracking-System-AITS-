@@ -136,7 +136,9 @@ class IssueSerializer(serializers.ModelSerializer):
         
         return issue
 
-
+    def update(self, instance, validated_data):
+        old_status = instance.status
+        old_assigned_to = instance.assigned_to
 
 
 
