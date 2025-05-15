@@ -213,6 +213,14 @@ class CommentSerializer(serializers.ModelSerializer):
                 message=f"New comment on your issue '{issue.title}'"
             )
 
+        return comment
+    
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ('id', 'user', 'notification_type', 'issue', 'message', 'is_read', 'created_at')
+        read_only_fields = ('user', 'notification_type', 'issue', 'message', 'created_at')
+
 
 
 
