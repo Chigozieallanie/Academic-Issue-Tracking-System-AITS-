@@ -85,6 +85,10 @@ class UserListSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}".strip()
+    
+class IssueSerializer(serializers.ModelSerializer):
+    created_by_name = serializers.SerializerMethodField()
+    assigned_to_name = serializers.SerializerMethodField()
 
 
 
