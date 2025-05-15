@@ -79,7 +79,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserListSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
 
-    c
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'role', 'phone_number', 'student_number', 'college', 'full_name')
+        
 
 
 
