@@ -175,7 +175,16 @@ class IssueSerializer(serializers.ModelSerializer):
                     message=f"Issue '{instance.title}' has been assigned to you"
                 )
             
-
+            # Notify the creator if they're not the one making the change
+            if instance.created_by != self.context['request'].user:
+                Notification.objects.create(
+                    user=instance.created_by,
+                    notification_type=Notification.ISSUE_UPDATED,
+                    issue=instance,
+                    message=f"Your issue '{instance.title}' has been assigned to {instance.assigned_to.get_full_name() if instance.assigned_to else 'no one'}"
+                )
+        
+        return instance
 
 
 
