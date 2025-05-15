@@ -61,6 +61,16 @@ class UserSerializer(serializers.ModelSerializer):
             phone_number=validated_data.get('phone_number', ''),
             student_number=validated_data.get('student_number', None),
             college=validated_data.get('college', None)
+        )
+        return user
+    
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'role', 'phone_number', 'student_number', 'college')
+        read_only_fields = ('id', 'username', 'role')
+
+        
 
 
 
