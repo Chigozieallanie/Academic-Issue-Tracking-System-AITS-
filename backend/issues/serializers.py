@@ -186,7 +186,8 @@ class IssueSerializer(serializers.ModelSerializer):
         
         return instance
 
-
+class CommentSerializer(serializers.ModelSerializer):
+    created_by_name = serializers.SerializerMethodField()
 
 
 
