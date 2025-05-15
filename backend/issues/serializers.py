@@ -76,6 +76,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email', 'first_name', 'last_name', 'role', 'phone_number', 'student_number', 'college')
         read_only_fields = ('id', 'username', 'role')
 
+class UserListSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    c
+
 
 
 
