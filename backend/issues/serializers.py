@@ -97,6 +97,11 @@ class IssueSerializer(serializers.ModelSerializer):
                   'updated_at', 'course_unit', 'college')
         read_only_fields = ('created_by', 'created_at', 'updated_at')
 
+    def get_created_by_name(self, obj):
+        if obj.created_by:
+            return f"{obj.created_by.first_name} {obj.created_by.last_name}".strip()
+        return None
+
 
 
 
