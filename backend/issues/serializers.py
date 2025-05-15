@@ -106,6 +106,13 @@ class IssueSerializer(serializers.ModelSerializer):
         if obj.assigned_to:
             return f"{obj.assigned_to.first_name} {obj.assigned_to.last_name}".strip()
         return None
+    
+    def create(self, validated_data):
+        validated_data['created_by'] = self.context['request'].user
+        
+        # If college is not provided, use the user's college
+        if 'college' not in validated_data:
+            validated_data['college'] = self.context['request'].user.college
 
 
 
