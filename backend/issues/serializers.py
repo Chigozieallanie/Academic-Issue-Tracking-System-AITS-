@@ -125,7 +125,16 @@ class IssueSerializer(serializers.ModelSerializer):
                 message=f"New issue '{issue.title}' has been assigned to you"
             )
 
-
+        # Create notification for academic registrars
+        for registrar in User.objects.filter(role=User.ACADEMIC_REGISTRAR):
+            Notification.objects.create(
+                user=registrar,
+                notification_type=Notification.ISSUE_CREATED,
+                issue=issue,
+                message=f"New issue '{issue.title}' has been created by {issue.created_by.get_full_name()}"
+            )
+        
+        return issue
 
 
 
