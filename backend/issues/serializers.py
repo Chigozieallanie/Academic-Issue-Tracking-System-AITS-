@@ -58,6 +58,9 @@ class UserSerializer(serializers.ModelSerializer):
             first_name=validated_data.get('first_name', ''),
             last_name=validated_data.get('last_name', ''),
             role=validated_data.get('role', User.STUDENT),
+            phone_number=validated_data.get('phone_number', ''),
+            student_number=validated_data.get('student_number', None),
+            college=validated_data.get('college', None)
 
 
 
