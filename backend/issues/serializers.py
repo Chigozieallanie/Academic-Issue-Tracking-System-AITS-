@@ -146,6 +146,16 @@ class IssueSerializer(serializers.ModelSerializer):
         
         instance.save()
 
+        # Create notifications for status changes
+        if 'status' in validated_data and old_status != instance.status:
+            # Notify the creator
+            Notification.objects.create(
+                user=instance.created_by,
+                notification_type=Notification.STATUS_CHANGED,
+                issue=instance,
+                message=f"Status of your issue '{instance.title}' has been changed to {instance.get_status_display()}"
+            )
+
 
 
 
