@@ -156,7 +156,14 @@ class IssueSerializer(serializers.ModelSerializer):
                 message=f"Status of your issue '{instance.title}' has been changed to {instance.get_status_display()}"
             )
 
-
+            # Notify the assigned user if any
+            if instance.assigned_to and instance.assigned_to != instance.created_by:
+                Notification.objects.create(
+                    user=instance.assigned_to,
+                    notification_type=Notification.STATUS_CHANGED,
+                    issue=instance,
+                    message=f"Status of issue '{instance.title}' has been changed to {instance.get_status_display()}"
+                )
 
 
 
