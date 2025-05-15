@@ -189,6 +189,16 @@ class IssueSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     created_by_name = serializers.SerializerMethodField()
 
+    class Meta:
+        model = Comment
+        fields = ('id', 'issue', 'content', 'created_by', 'created_by_name', 'created_at')
+        read_only_fields = ('created_by', 'created_at')
+    
+    def get_created_by_name(self, obj):
+        if obj.created_by:
+            return f"{obj.created_by.first_name} {obj.created_by.last_name}".strip()
+        return None
+
 
 
 
