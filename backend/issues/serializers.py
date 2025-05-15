@@ -198,6 +198,20 @@ class CommentSerializer(serializers.ModelSerializer):
         if obj.created_by:
             return f"{obj.created_by.first_name} {obj.created_by.last_name}".strip()
         return None
+    
+    def create(self, validated_data):
+        validated_data['created_by'] = self.context['request'].user
+        comment = Comment.objects.create(**validated_data)
+        
+        # Create notification for the issue creator
+        issue = comment.issue
+        if issue.created_by != self.context['request'].user:
+            Notification.objects.create(
+                user=issue.created_by,
+                notification_type=Notification.COMMENT_ADDED,
+                issue=issue,
+                message=f"New comment on your issue '{issue.title}'"
+            )
 
 
 
