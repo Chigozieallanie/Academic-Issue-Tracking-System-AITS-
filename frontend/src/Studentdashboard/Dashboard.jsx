@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import "./Dashboard.css";
-import { Link, NavLink, Outlet } from "react-router-dom";
-import { CiLogout } from "react-icons/ci";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import { CgProfile } from "react-icons/cg";
-import { MdDashboard } from "react-icons/md";
-import { FaAddressBook } from "react-icons/fa";
-import { SiStatuspage } from "react-icons/si";
+"use client"
+
+import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import api from "../../services/api"
+import { useAuth } from "../../contexts/AuthContext"
+
+
+const StudentDashboard = ({ stats }) => {
+  const { user } = useAuth()
+  const [recentIssues, setRecentIssues] = useState([])
+  const [loading, setLoading] = useState(true)
 import { GoIssueOpened } from "react-icons/go";
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
