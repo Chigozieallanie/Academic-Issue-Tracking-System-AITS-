@@ -114,4 +114,18 @@ useEffect(() => {
       </div>
 
       <div className="dashboard-footer"></div>
+      <div className="quick-actions">
+          <h3>Quick Actions</h3>
+          <div className="action-buttons">
+            <Link to="/issues/create" className="btn btn-primary">
+              Submit New Issue
+            </Link>
+            <Link to="/issues" className="btn btn-secondary">
+              View All Issues
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 export default Dashboard;
