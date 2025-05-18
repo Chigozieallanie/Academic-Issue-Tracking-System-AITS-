@@ -98,4 +98,20 @@ useEffect(() => {
                     <span className={`status-badge ${getStatusClass(issue.status)}`}>
                       {issue.status.replace("_", " ")}
                     </span>
+                    </div>
+                  <p className="issue-description">{issue.description.substring(0, 100)}...</p>
+                  <div className="issue-footer">
+                    <span>Created: {new Date(issue.created_at).toLocaleDateString()}</span>
+                    <span>Assigned to: {issue.assigned_to_name || "Unassigned"}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        
+      </div>
+
+      <div className="dashboard-footer"></div>
 export default Dashboard;
