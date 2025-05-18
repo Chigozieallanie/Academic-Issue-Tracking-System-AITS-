@@ -44,31 +44,23 @@ useEffect(() => {
       default:
         return ""
     }
-  const lecturers = ["Lecturer A", "Lecturer B", "Lecturer C"];
-  const courseCodes = ["CS101", "CS102", "CS103"];
+    return (
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1>Student Dashboard</h1>
+        <p>Welcome back, {user.first_name}!</p>
+      </div>
 
-  const courses = {
-    "Computer Science": {
-      1: [
-        "Introduction to Programming",
-        "Data Structures",
-        "Discrete Mathematics"
-      ],
-      2: ["Algorithms", "Operating Systems", "Database Systems"]
-    },
-    Medicine: {
-      1: ["Anatomy", "Physiology", "Biochemistry"],
-      2: ["Pathology", "Pharmacology", "Microbiology"]
-    },
-    Economics: {
-      1: ["Microeconomics", "Macroeconomics", "Statistics"],
-      2: ["Econometrics", "Development Economics", "Public Finance"]
-    },
-    History: {
-      1: ["Ancient History", "Medieval History", "Modern History"],
-      2: ["African History", "Asian History", "European History"]
-    }
-  };
+      <div className="dashboard-stats">
+        <div className="stat-card">
+          <div className="stat-value">{stats.totalIssues}</div>
+          <div className="stat-label">Total Issues</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{stats.pendingIssues}</div>
+          <div className="stat-label">Pending</div>
+        </div>
+        <div className="stat-card">
 
   const handleReportIssue = () => {
     if (!category) {
