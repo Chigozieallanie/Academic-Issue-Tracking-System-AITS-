@@ -78,4 +78,24 @@ useEffect(() => {
               Create New Issue
             </Link>
           </div>
+          {loading ? (
+            <div className="loading">Loading recent issues...</div>
+          ) : recentIssues.length === 0 ? (
+            <div className="empty-state">
+              <p>You haven't submitted any issues yet.</p>
+              <Link to="/issues/create" className="btn btn-primary">
+                Submit Your First Issue
+              </Link>
+            </div>
+          ) : (
+            <div className="issue-list">
+              {recentIssues.map((issue) => (
+                <div key={issue.id} className="issue-card">
+                  <div className="issue-header">
+                    <h3>
+                      <Link to={`/issues/${issue.id}`}>{issue.title}</Link>
+                    </h3>
+                    <span className={`status-badge ${getStatusClass(issue.status)}`}>
+                      {issue.status.replace("_", " ")}
+                    </span>
 export default Dashboard;
