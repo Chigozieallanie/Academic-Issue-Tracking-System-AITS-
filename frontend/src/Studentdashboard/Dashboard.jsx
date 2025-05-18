@@ -61,94 +61,21 @@ useEffect(() => {
           <div className="stat-label">Pending</div>
         </div>
         <div className="stat-card">
-
-  const handleReportIssue = () => {
-    if (!category) {
-      alert("Please select an issue category.");
-      return;
-    }
-    if (!newIssue.trim()) {
-      alert("Please enter an issue description.");
-      return;
-    }
-
-    const issueData = {
-      id: issues.length + 1,
-      category: category,
-      description: newIssue,
-      timestamp: new Date().toLocaleString(),
-      status: "Pending",
-      documentName: document ? document.name : "No document attached",
-      lecturer: lecturer,
-      courseCode: courseCode
-    };
-
-    setIssues([...issues, issueData]);
-    setCategory("");
-    setNewIssue("");
-    setDocument(null);
-    setLecturer("");
-    setCourseCode("");
-    alert("Issue reported successfully!");
-  };
-
-  const handleResolveIssue = (issueId) => {
-    setIssues((prevIssues) =>
-      prevIssues.map((issue) =>
-        issue.id === issueId ? { ...issue, status: "Resolved" } : issue
-      )
-    );
-    alert(`Issue #${issueId} has been resolved.`);
-  };
-
-  const handleCourseChange = (e) => {
-    const selectedCourse = e.target.value;
-    setCourse(selectedCourse);
-    setCourseUnits(courses[selectedCourse][semester] || []);
-  };
-
-  const handleSemesterChange = (e) => {
-    const selectedSemester = e.target.value;
-    setSemester(selectedSemester);
-    setCourseUnits(courses[course][selectedSemester] || []);
-  };
-
-  return (
-    <div className="dashboard-container">
-      <div className="sidebar">
-        <h2>STUDENT DASHBOARD</h2>
-        <ul>
-          {[
-            { path: "dashboard", icon: <MdDashboard /> },
-            { path: "profile", icon: <CgProfile /> },
-            { path: "my-Course", icon: <FaAddressBook /> },
-            { path: "reportIssue", icon: <GoIssueOpened /> },
-            { path: "issueList", icon: <SiStatuspage /> },
-            { path: "notification", icon: <IoMdNotificationsOutline /> },
-            { path: "Logout", icon: <CiLogout /> }
-          ].map((section) => (
-            <NavLink to={section.path} key={section.path}>
-              <li key={section.path}>
-                {section.icon}
-                {section.path}
-              </li>
-            </NavLink>
-          ))}
-        </ul>
-      </div>
-
-      <div className="main-content">
-        <header className="header">
-          <h1>MAKERERE UNIVERSITY</h1>
-          <p>Academic Issue Tracking System</p>
-        </header>
-
-        <div className="content">
-          <Outlet />
+         <div className="stat-value">{stats.inProgressIssues}</div>
+          <div className="stat-label">In Progress</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{stats.resolvedIssues}</div>
+          <div className="stat-label">Resolved</div>
         </div>
       </div>
-    </div>
-  );
-};
 
+      <div className="dashboard-content ">
+        <div className="dashboard-section ">
+          <div className="section-header">
+            <h2>Your Recent Issues</h2>
+            <Link to="/issues/create" className="btn btn-primary">
+              Create New Issue
+            </Link>
+          </div>
 export default Dashboard;
