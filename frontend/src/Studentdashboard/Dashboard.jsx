@@ -10,7 +10,8 @@ const StudentDashboard = ({ stats }) => {
   const { user } = useAuth()
   const [recentIssues, setRecentIssues] = useState([])
   const [loading, setLoading] = useState(true)
-useEffect(() => {
+
+  useEffect(() => {
     const fetchRecentIssues = async () => {
       try {
         const response = await api.get("/issues/")
@@ -26,7 +27,8 @@ useEffect(() => {
         setLoading(false)
       }
     }
-  fetchRecentIssues()
+
+    fetchRecentIssues()
   }, [user.id])
 
 
@@ -44,7 +46,9 @@ useEffect(() => {
       default:
         return ""
     }
-    return (
+  }
+
+  return (
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h1>Student Dashboard</h1>
@@ -61,7 +65,7 @@ useEffect(() => {
           <div className="stat-label">Pending</div>
         </div>
         <div className="stat-card">
-         <div className="stat-value">{stats.inProgressIssues}</div>
+          <div className="stat-value">{stats.inProgressIssues}</div>
           <div className="stat-label">In Progress</div>
         </div>
         <div className="stat-card">
@@ -78,6 +82,7 @@ useEffect(() => {
               Create New Issue
             </Link>
           </div>
+
           {loading ? (
             <div className="loading">Loading recent issues...</div>
           ) : recentIssues.length === 0 ? (
@@ -98,7 +103,7 @@ useEffect(() => {
                     <span className={`status-badge ${getStatusClass(issue.status)}`}>
                       {issue.status.replace("_", " ")}
                     </span>
-                    </div>
+                  </div>
                   <p className="issue-description">{issue.description.substring(0, 100)}...</p>
                   <div className="issue-footer">
                     <span>Created: {new Date(issue.created_at).toLocaleDateString()}</span>
@@ -113,8 +118,8 @@ useEffect(() => {
         
       </div>
 
-      <div className="dashboard-footer"></div>
-      <div className="quick-actions">
+      <div className="dashboard-footer">
+        <div className="quick-actions">
           <h3>Quick Actions</h3>
           <div className="action-buttons">
             <Link to="/issues/create" className="btn btn-primary">
@@ -128,6 +133,7 @@ useEffect(() => {
       </div>
     </div>
   )
-  }   
-  
-export default StudentDashboard;
+}
+
+export default StudentDashboard
+
