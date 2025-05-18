@@ -10,27 +10,22 @@ const StudentDashboard = ({ stats }) => {
   const { user } = useAuth()
   const [recentIssues, setRecentIssues] = useState([])
   const [loading, setLoading] = useState(true)
-import { GoIssueOpened } from "react-icons/go";
-const Dashboard = () => {
-  const [activeSection, setActiveSection] = useState("dashboard");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [college, setCollege] = useState("");
-  const [course, setCourse] = useState("");
-  const [year, setYear] = useState("");
-  const [semester, setSemester] = useState("");
-  const [profilePhoto, setProfilePhoto] = useState(null);
-  const [profileSaved, setProfileSaved] = useState(false);
-  const [studentId, setStudentId] = useState("");
-  const [regNo, setRegNo] = useState("");
-  const [issues, setIssues] = useState([]);
-  const [newIssue, setNewIssue] = useState("");
-  const [category, setCategory] = useState("");
-  const [document, setDocument] = useState(null);
-  const [lecturer, setLecturer] = useState("");
-  const [courseCode, setCourseCode] = useState("");
-  const [courseUnits, setCourseUnits] = useState([]);
+useEffect(() => {
+    const fetchRecentIssues = async () => {
+      try {
+        const response = await api.get("/issues/")
+        // Filter issues created by the current student
+        const userIssues = response.data.filter((issue) => issue.created_by === user.id)
+        // Sort by creation date (newest first) and take the first 5
+        const sortedIssues = userIssues.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5)
+
+        setRecentIssues(sortedIssues)
+        setLoading(false)
+      } catch (error) {
+        console.error("Error fetching recent issues:", error)
+        setLoading(false)
+      }
+    }
 
   const issueCategories = [
     "Academic",
