@@ -26,14 +26,24 @@ useEffect(() => {
         setLoading(false)
       }
     }
+  fetchRecentIssues()
+  }, [user.id])
 
-  const issueCategories = [
-    "Academic",
-    "Administrative",
-    "Technical",
-    "Financial",
-    "Other"
-  ];
+
+
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "pending":
+        return "status-pending"
+      case "in_progress":
+        return "status-in-progress"
+      case "resolved":
+        return "status-resolved"
+      case "closed":
+        return "status-closed"
+      default:
+        return ""
+    }
   const lecturers = ["Lecturer A", "Lecturer B", "Lecturer C"];
   const courseCodes = ["CS101", "CS102", "CS103"];
 
