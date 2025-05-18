@@ -128,4 +128,6 @@ useEffect(() => {
       </div>
     </div>
   )
-export default Dashboard;
+  }   
+  
+export default StudentDashboard;
