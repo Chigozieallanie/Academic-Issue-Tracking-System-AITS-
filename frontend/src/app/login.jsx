@@ -23,7 +23,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-primary/10 flex items-center justify-center p-4">
       <Card className="mx-auto w-full max-w-md border-primary shadow-lg">
         <CardHeader className="space-y-1 border-b border-primary/20 bg-primary text-white">
-          <CardTitle className="text-2xl font-bold">Login</CardTitle>
+          <CardTitle className="text-2xl font-bold">Lecturer Login</CardTitle>
           <CardDescription className="text-primary-foreground/80">
             Enter your credentials to access your account
           </CardDescription>
