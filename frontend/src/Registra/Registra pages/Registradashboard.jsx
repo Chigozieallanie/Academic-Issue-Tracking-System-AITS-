@@ -1,247 +1,199 @@
-import React, { useState } from 'react';
-import './Registradashboard.css';
-import { Link } from 'react-router-dom';
+"use client"
 
-const Registradashboard = () => {
-    const [profilePhoto, setProfilePhoto] = useState(null);
-
-    const handlePhotoChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setProfilePhoto(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    return (
-        <div className="registra-dashboard-container">
-            <aside className="registra-dashboard-sidebar">
-                <h1>Registrar Dashboard</h1>
-                <ul>
-                    <li><a href="#dashboard">Dashboard</a></li>
-                    <li><a href="#profile">Profile</a></li>
-                    <li><a href="#performance">Monitor Performance</a></li>
-                    <li><a href="#issues">Recurring Issues</a></li>
-                    <li><a href="#escalated">Escalated Issues</a></li>
-                    <li><a href="#communication">Communication</a></li>
-                    <li><a href="#logout">Log Out</a></li>
-                </ul>
-            </aside>
-            
-
-            <main className="registra-dashboard-main">
-                <section id="dashboard" className="registra-dashboard-section">
-                    <h2>Dashboard Section</h2>
-                    <p>Welcome to the dashboard. Here you can access all the features and tools.</p>
-                    <div className="dashboard-overview">
-                        <div className="overview-card">
-                            <h3>Total Students</h3>
-                            <p>1,200</p>
-                        </div>
-                        <div className="overview-card">
-                            <h3>Total Lecturers</h3>
-                            <p>150</p>
-                        </div>
-                        <div className="overview-card">
-                            <h3>Active Issues</h3>
-                            <p>25</p>
-                        </div>
-                        <div className="overview-card">
-                            <h3>Resolved Issues</h3>
-                            <p>320</p>
-                        </div>
-                    </div>
-                </section>
+import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import api from "../../services/api"
+import { useAuth } from "../../contexts/AuthContext"
 
 
+const RegistraDashboard = ({ stats }) => {
+  const { user } = useAuth()
+  const [allIssues, setAllIssues] = useState([])
+  const [collegeStats, setCollegeStats] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [priorityIssues, setPriorityIssues] = useState([])
+
+  useEffect(() => {
+    const fetchAllIssues = async () => {
+      try {
+        const response = await api.get("/issues/")
+        const issues = response.data
+        setAllIssues(issues)
+
+        // Calculate college statistics
+        const collegeMap = {}
+        issues.forEach((issue) => {
+          const createdBy = issue.created_by_name
+          const college = issue.college || "Unknown"
+
+          if (!collegeMap[college]) {
+            collegeMap[college] = { name: college, count: 0 }
+          }
+          collegeMap[college].count++
+        })
+
+        setCollegeStats(Object.values(collegeMap))
+
+        // Identify priority issues (pending for more than 7 days)
+        const sevenDaysAgo = new Date()
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+
+        const priority = issues.filter((issue) => {
+          const createdDate = new Date(issue.created_at)
+          return issue.status === "pending" && createdDate < sevenDaysAgo
+        })
+
+        setPriorityIssues(priority)
+        setLoading(false)
+      } catch (error) {
+        console.error("Error fetching issues for registrar:", error)
+        setLoading(false)
+      }
+    }
+
+    fetchAllIssues()
+  }, [])
 
 
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "pending":
+        return "status-pending"
+      case "in_progress":
+        return "status-in-progress"
+      case "resolved":
+        return "status-resolved"
+      case "closed":
+        return "status-closed"
+      default:
+        return ""
+    }
+  }
 
-                <section id="profile" className="registra-dashboard-section">
-                    <h2>Profile Section</h2>
-                    <p>Manage your profile information here.</p>
-                    {profilePhoto && (
-                        <div className="profile-photo-preview">
-                            <img src={profilePhoto} alt="Profile Preview" />
-                        </div>
-                    )}
-                    <form className="profile-form">
-                        <label htmlFor="profile-photo">Profile Photo:</label>
-                        <input
-                            type="file"
-                            id="profile-photo"
-                            name="profilePhoto"
-                            accept="image/*"
-                            onChange={handlePhotoChange}
-                        />
-                        <label htmlFor="email">Email:</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" />
+  return (
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1>Academic Registrar Dashboard</h1>
+        <p>Welcome back, {user.first_name}!</p>
+      </div>
 
-                        <label htmlFor="id">ID:</label>
-                        <input type="text" id="id" name="id" placeholder="Enter your ID" />
-
-                        <label htmlFor="password">Password:</label>
-                        <input type="password" id="password" name="password" placeholder="Enter your password" />
-
-                        <button type="submit">Save Profile</button>
-                    </form>
-                </section>
-
-
-
-                <section id="performance" className="registra-dashboard-section">
-                    <h2>Monitor Departmental Performance</h2>
-                    <p>View and analyze departmental performance metrics here.</p>
-                    <table className="performance-table">
-                        <thead>
-                            <tr>
-                                <th>Department</th>
-                                <th>Performance Metric</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Computer Science</td>
-                                <td>85%</td>
-                                <td>Good</td>
-                            </tr>
-                            <tr>
-                                <td>Information Systems</td>
-                                <td>78%</td>
-                                <td>Average</td>
-                            </tr>
-                            <tr>
-                                <td>Software Engineering</td>
-                                <td>92%</td>
-                                <td>Excellent</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-
-
-
-
-                <section id="issues" className="registra-dashboard-section">
-                    <h2>Identify Recurring Issues</h2>
-                    <p>Track and identify recurring issues in the system.</p>
-                    <table className="issues-table">
-                        <thead>
-                            <tr>
-                                <th>Issue</th>
-                                <th>Frequency</th>
-                                <th>Last Reported</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Login Failures</td>
-                                <td>15 times</td>
-                                <td>2023-03-10</td>
-                            </tr>
-                            <tr>
-                                <td>System Downtime</td>
-                                <td>8 times</td>
-                                <td>2023-03-08</td>
-                            </tr>
-                            <tr>
-                                <td>Data Sync Errors</td>
-                                <td>5 times</td>
-                                <td>2023-03-09</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-
-
-
-
-                <section id="escalated" className="registra-dashboard-section">
-                    <h2>Oversee Escalated Issues</h2>
-                    <p>Manage and resolve escalated issues here.</p>
-                    <table className="escalated-issues-table">
-                        <thead>
-                            <tr>
-                                <th>Issue</th>
-                                <th>Priority</th>
-                                <th>Assigned To</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Missing Exam Marks</td>
-                                <td>High</td>
-                                <td>Mr.A</td>
-                                <td>In Progress</td>
-                            </tr>
-                            <tr>
-                                <td>Missing Course work Marks</td>
-                                <td>Critical</td>
-                                <td>Mrs.B</td>
-                                <td>Pending</td>
-                            </tr>
-                            <tr>
-                                <td>Can't enroll into the course unit</td>
-                                <td>Medium</td>
-                                <td>Miss.c</td>
-                                <td>Resolved</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-
-
-
-
-                <section id="communication" className="registra-dashboard-section">
-                    <h2>Communication</h2>
-                    <p>Send messages or announcements to the lecturer.</p>
-                    <form className="communication-form">
-                        <label htmlFor="recipient">Recipient:</label>
-                        <select id="recipient" name="recipient">
-                            <option value="Mr.A">Mr.A</option>
-                            <option value="Mrs.B">Mrs.B</option>
-                            <option value="Miss.C">Miss.C</option>
-                        </select>
-
-                        <label htmlFor="message">Message:</label>
-                        <textarea id="message" name="message" rows="4" placeholder="Type your message here..."></textarea>
-                        <button type="submit" className="send-button">Send</button>
-                    </form>
-                </section>
-
-
-
-
-
-
-
-                <section id="logout" className="registra-dashboard-section">
-                    <h2>Log Out</h2>
-                    <p>Are you sure you want to log out?</p>
-                    <div className="logout-buttons">
-                        <Link to="/Registralogin">
-                            <button onClick={() => alert('Logged out successfully!')}>Yes, Log Out</button>
-                        </Link>
-                        <button onClick={() => alert('Log out canceled.')}>Cancel & stay logged in</button>
-                    </div>
-                </section>
-
-
-
-                
-                <p>© {new Date().getFullYear()} MAK-AITS. All rights reserved</p>
-            </main>
+      <div className="dashboard-stats">
+        <div className="stat-card">
+          <div className="stat-value">{stats.totalIssues}</div>
+          <div className="stat-label">Total Issues</div>
         </div>
-    );
-};
+        <div className="stat-card">
+          <div className="stat-value">{stats.pendingIssues}</div>
+          <div className="stat-label">Pending</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{stats.inProgressIssues}</div>
+          <div className="stat-label">In Progress</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{stats.resolvedIssues}</div>
+          <div className="stat-label">Resolved</div>
+        </div>
+      </div>
 
-export default Registradashboard;
+      <div className="dashboard-content">
+        <div className="dashboard-section">
+          <div className="section-header">
+            <h2>Priority Issues</h2>
+            <Link to="/issues" className="btn btn-secondary">
+              View All Issues
+            </Link>
+          </div>
+
+          {loading ? (
+            <div className="loading">Loading priority issues...</div>
+          ) : priorityIssues.length === 0 ? (
+            <div className="empty-state">
+              <p>There are no priority issues at this time.</p>
+            </div>
+          ) : (
+            <div className="issue-list">
+              {priorityIssues.slice(0, 5).map((issue) => (
+                <div key={issue.id} className="issue-card priority">
+                  <div className="issue-header">
+                    <h3>
+                      <Link to={`/issues/${issue.id}`}>{issue.title}</Link>
+                    </h3>
+                    <span className={`status-badge ${getStatusClass(issue.status)}`}>
+                      {issue.status.replace("_", " ")}
+                    </span>
+                  </div>
+                  <p className="issue-description">{issue.description.substring(0, 100)}...</p>
+                  <div className="issue-footer">
+                    <span>Created by: {issue.created_by_name}</span>
+                    <span>Created: {new Date(issue.created_at).toLocaleDateString()}</span>
+                    <span>Assigned to: {issue.assigned_to_name || "Unassigned"}</span>
+                  </div>
+                  <div className="issue-actions">
+                    <Link to={`/issues/${issue.id}`} className="btn btn-primary">
+                      Review Issue
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+      </div>
+
+      <div className="dashboard-section">
+        <div className="section-header">
+          <h2>Recent Unassigned Issues</h2>
+        </div>
+
+        {loading ? (
+          <div className="loading">Loading unassigned issues...</div>
+        ) : (
+          <div className="issue-list">
+            {allIssues
+              .filter((issue) => !issue.assigned_to)
+              .slice(0, 5)
+              .map((issue) => (
+                <div key={issue.id} className="issue-card">
+                  <div className="issue-header">
+                    <h3>
+                      <Link to={`/issues/${issue.id}`}>{issue.title}</Link>
+                    </h3>
+                    <span className={`status-badge ${getStatusClass(issue.status)}`}>
+                      {issue.status.replace("_", " ")}
+                    </span>
+                  </div>
+                  <p className="issue-description">{issue.description.substring(0, 100)}...</p>
+                  <div className="issue-footer">
+                    <span>Created by: {issue.created_by_name}</span>
+                    <span>Created: {new Date(issue.created_at).toLocaleDateString()}</span>
+                  </div>
+                  <div className="issue-actions">
+                    <Link to={`/issues/${issue.id}`} className="btn btn-primary">
+                      Assign Issue
+                    </Link>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
+
+      <div className="dashboard-footer">
+        <div className="quick-actions">
+          <h3>Quick Actions</h3>
+          <div className="action-buttons">
+            <Link to="/issues" className="btn btn-primary">
+              View All Issues
+            </Link>
+            <button className="btn btn-secondary">Generate Report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default RegistraDashboard
+

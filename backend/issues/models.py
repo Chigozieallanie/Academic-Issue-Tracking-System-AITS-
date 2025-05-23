@@ -2,8 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
-# from .models import Issue, StudentProfile as Student, CustomUser
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.conf import settings
 
 
 
@@ -44,7 +46,7 @@ class Issue(models.Model):
         return self.title
 
 class CustomUser(AbstractUser):
-    # Role Choices
+    
     STUDENT = 'student'
     LECTURER = 'lecturer'
     REGISTRAR = 'registrar'
@@ -161,22 +163,6 @@ class Course(models.Model):
     title = models.CharField(max_length=200)
     lecturer = models.ForeignKey('issues.LecturerProfile', on_delete=models.CASCADE)
     students = models.ManyToManyField('issues.StudentProfile', related_name='courses')
-
-
-class Enrollment(models.Model):
-    student = models.ForeignKey('issues.StudentProfile', on_delete=models.CASCADE)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
-    semester = models.CharField(max_length=20)
-    grade = models.CharField(max_length=10, blank=True, null=True)
-
-
-class Mentorship(models.Model):
-    mentor = models.ForeignKey('issues.LecturerProfile', on_delete=models.CASCADE)
-    mentee = models.ForeignKey('issues.StudentProfile', on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField(blank=True, null=True)
-    status = models.CharField(max_length=10, default='active')
-
 
 class Comment(models.Model):
     content = models.TextField()

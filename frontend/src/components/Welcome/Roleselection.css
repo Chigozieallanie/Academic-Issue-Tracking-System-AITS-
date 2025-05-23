@@ -1,0 +1,30 @@
+.role-selection-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    /* overflow: hidden; */
+    /* background-color: #025f02;  */
+    /*background-image: url('../../../public/mainbuilding.jpg');*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.85;
+    z-index: -1;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 500px;
+  }
+  button: {
+    padding: "12px 20px",
+    backgroundColor: "#4CAF50",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    fontSize: "16px",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
+    textAlign: "center",
+    width: "100%",
