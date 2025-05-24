@@ -117,3 +117,31 @@
   justify-content: space-between;
   align-items: center;
 }
+.issue-header h3 {
+  font-size: 1.1rem;
+  color: #1a237e;
+  margin: 0;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-pending {
+  background: #fff7e6;
+  color: #b45309;
+}
+
+.status-in-progress {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.status-resolved {
+  background: #e6fffa;
+  color: #059669;
+}
