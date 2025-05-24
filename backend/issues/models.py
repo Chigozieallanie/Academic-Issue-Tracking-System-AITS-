@@ -81,14 +81,7 @@ class Issue(models.Model):
 
 
 
-class RegistrarProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='registrar_profile')
-    office = models.CharField(max_length=100)
-    contact_info = models.TextField()
 
-    def __str__(self):
-        return f"{self.user.username} - Registrar"
-    
     
 class Course(models.Model):
     title = models.CharField(max_length=200)
