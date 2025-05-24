@@ -8,8 +8,6 @@ def get_default_user():
     return User.objects.first().id 
 
 
-
-
 class User(AbstractUser):
     STUDENT = 'student'
     LECTURER = 'lecturer'
