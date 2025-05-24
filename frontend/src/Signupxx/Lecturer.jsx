@@ -27,3 +27,9 @@ const LecturerDashboard = ({ stats }) => {
           resolved: userIssues.filter((issue) => issue.status === "resolved").length,
           closed: userIssues.filter((issue) => issue.status === "closed").length,
         }
+         setChartData([
+          { name: "Pending", count: statusCounts.pending },
+          { name: "In Progress", count: statusCounts.in_progress },
+          { name: "Resolved", count: statusCounts.resolved },
+          { name: "Closed", count: statusCounts.closed },
+        ])
