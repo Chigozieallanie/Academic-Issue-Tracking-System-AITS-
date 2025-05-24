@@ -27,3 +27,15 @@
   margin-bottom: 32px;
   flex-wrap: wrap;
 }
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(30, 64, 175, 0.07);
+  padding: 24px 32px;
+  min-width: 140px;
+  text-align: center;
+  transition: box-shadow 0.2s;
+}
+.stat-card:hover {
+  box-shadow: 0 4px 24px rgba(30, 64, 175, 0.13);
+}
