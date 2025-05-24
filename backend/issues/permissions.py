@@ -19,8 +19,6 @@ class IsAdminUser(permissions.BasePermission):
 
 
     
-class IsRegistrarRole():
-    allowed_roles = ['registrar']
 
 class IsLecturerRole():
     allowed_roles = ['lecturer']
