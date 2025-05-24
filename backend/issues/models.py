@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinValueValidator, MaxValueValidator
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save, post_delete
