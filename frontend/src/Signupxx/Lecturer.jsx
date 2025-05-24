@@ -70,3 +70,16 @@ const LecturerDashboard = ({ stats }) => {
           <div className="stat-value">{assignedIssues.length}</div>
           <div className="stat-label">Assigned Issues</div>
         </div>
+        <div className="stat-card">
+          <div className="stat-value">{pendingIssues.length}</div>
+          <div className="stat-label">Pending</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{inProgressIssues.length}</div>
+          <div className="stat-label">In Progress</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{assignedIssues.filter((issue) => issue.status === "resolved").length}</div>
+          <div className="stat-label">Resolved</div>
+        </div>
+      </div>
