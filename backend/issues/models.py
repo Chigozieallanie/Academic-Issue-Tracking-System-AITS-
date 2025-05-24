@@ -83,10 +83,6 @@ class Issue(models.Model):
 
 
     
-class Course(models.Model):
-    title = models.CharField(max_length=200)
-    lecturer = models.ForeignKey('issues.LecturerProfile', on_delete=models.CASCADE)
-    students = models.ManyToManyField('issues.StudentProfile', related_name='courses')
 
 class Comment(models.Model):
     content = models.TextField()
