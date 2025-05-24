@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.conf import settings
+
 
 def get_default_user():
     return User.objects.first().id 
