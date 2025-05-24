@@ -7,43 +7,10 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.conf import settings
 
+def get_default_user():
+    return User.objects.first().id 
 
 
-class Issue(models.Model):
-    CATEGORY_CHOICES = [
-        ('academic', 'Academic'),
-        ('administrative', 'Administrative'),
-        ('technical', 'Technical'),
-        ('other', 'Other'),
-    ]
-
-    STATUS_CHOICES = [
-        ('open', 'Open'),
-        ('pending', 'Pending'),
-        ('assigned', 'Assigned'),
-        ('resolved', 'Resolved'),
-        ('closed', 'Closed'),
-    ]
-
-
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,default=1)
-    title = models.CharField(max_length=255, default="Default Title")
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='academic')
-    lecturer = models.CharField(max_length=50)
-    coursecode = models.CharField(max_length=20)
-    description = models.TextField()
-    document = models.FileField(upload_to='issue_documents/', blank=True, null=True)
-    status = models.CharField(max_length=10,choices=STATUS_CHOICES,default='open',  )
-    assigned_to = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='assigned_issues'
-    )
-            
-    def __str__(self):
-        return self.title
 
 
 class User(AbstractUser):
@@ -68,6 +35,97 @@ class User(AbstractUser):
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}".strip()
+
+
+
+class Issue(models.Model):
+    PENDING = 'pending'
+    IN_PROGRESS = 'in_progress'
+    RESOLVED = 'resolved'
+    CLOSED = 'closed'
+    
+    STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (IN_PROGRESS, 'In Progress'),
+        (RESOLVED, 'Resolved'),
+        (CLOSED, 'Closed'),
+    ]
+    
+    LOW = 'low'
+    MEDIUM = 'medium'
+    HIGH = 'high'
+    
+    PRIORITY_CHOICES = [
+        (LOW, 'Low'),
+        (MEDIUM, 'Medium'),
+        (HIGH, 'High'),
+    ]
+    
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default=MEDIUM)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_issues')
+    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_issues')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    course_unit = models.CharField(max_length=100, blank=True, null=True)
+    college = models.CharField(max_length=100, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+    
+    def get_status_display(self):
+        return dict(self.STATUS_CHOICES).get(self.status, self.status)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
