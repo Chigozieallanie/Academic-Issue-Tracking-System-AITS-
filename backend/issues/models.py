@@ -80,14 +80,6 @@ class Issue(models.Model):
 
 
 
-class LecturerProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='lecturer_profile')
-    staff_id = models.CharField(max_length=20)
-    department = models.CharField(max_length=100)
-    specialization = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f"{self.user.username} - Lecturer"
 
 class RegistrarProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='registrar_profile')
