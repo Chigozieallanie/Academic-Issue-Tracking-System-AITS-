@@ -83,3 +83,11 @@ const LecturerDashboard = ({ stats }) => {
           <div className="stat-label">Resolved</div>
         </div>
       </div>
+       <div className="dashboard-content">
+        <div className="dashboard-section">
+          <div className="section-header">
+            <h2>Issues Requiring Your Attention</h2>
+            <Link to="/issues" className="btn btn-secondary">
+              View All Issues
+            </Link>
+          </div>
