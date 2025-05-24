@@ -2,32 +2,33 @@ from rest_framework import permissions
 from rest_framework.permissions import BasePermission
 from .models import User
 
-
-class HasPermission(BasePermission):
+class IsAdminUser(permissions.BasePermission):
     def has_permission(self, request, view):
-        required_permission = getattr(view, 'required_permission', None)
-        if not required_permission:
-            return False
-        return request.user.permissions.filter(name=required_permission).exists()
-    
-class IsRole(permissions.BasePermission):
-    """
-    Custom base permission class to handle role-based permission checks.
-    Subclass this for each role-based permission.
-    """
-    allowed_roles = []
+        return request.user and request.user.role == User.ADMIN
+
+
+
+
+
+
+
+
+
+
+
+
 
     def has_permission(self, request, view):
         # Check if the user's role is in the allowed roles
         return request.user.is_authenticated and request.user.role in self.allowed_roles
 
-class IsRegistrarRole(IsRole):
+class IsRegistrarRole():
     allowed_roles = ['registrar']
 
-class IsLecturerRole(IsRole):
+class IsLecturerRole():
     allowed_roles = ['lecturer']
 
-class IsStudentRole(IsRole):
+class IsStudentRole():
     allowed_roles = ['student']
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
