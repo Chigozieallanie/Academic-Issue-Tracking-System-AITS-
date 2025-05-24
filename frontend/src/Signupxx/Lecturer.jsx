@@ -10,3 +10,11 @@ const LecturerDashboard = ({ stats }) => {
   const [assignedIssues, setAssignedIssues] = useState([])
   const [loading, setLoading] = useState(true)
   const [chartData, setChartData] = useState([])
+  useEffect(() => {
+    const fetchAssignedIssues = async () => {
+      try {
+        const response = await api.get("/issues/")
+        // Filter issues assigned to the current lecturer
+        const userIssues = response.data.filter((issue) => issue.assigned_to === user.id)
+        // Sort by creation date (newest first)
+        const sortedIssues = userIssues.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
