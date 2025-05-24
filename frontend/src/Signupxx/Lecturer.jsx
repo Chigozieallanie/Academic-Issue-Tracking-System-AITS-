@@ -91,3 +91,21 @@ const LecturerDashboard = ({ stats }) => {
               View All Issues
             </Link>
           </div>
+          {loading ? (
+            <div className="loading">Loading assigned issues...</div>
+          ) : pendingIssues.length === 0 ? (
+            <div className="empty-state">
+              <p>You have no pending issues that require your attention.</p>
+            </div>
+          ) : (
+            <div className="issue-list">
+              {pendingIssues.slice(0, 5).map((issue) => (
+                <div key={issue.id} className="issue-card">
+                  <div className="issue-header">
+                    <h3>
+                      <Link to={`/issues/${issue.id}`}>{issue.title}</Link>
+                    </h3>
+                    <span className={`status-badge ${getStatusClass(issue.status)}`}>
+                      {issue.status.replace("_", " ")}
+                    </span>
+                  </div>
