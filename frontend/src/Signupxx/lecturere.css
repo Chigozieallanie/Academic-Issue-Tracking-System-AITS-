@@ -1,0 +1,6 @@
+.dashboard-container {
+  background: linear-gradient(120deg, #f0f4ff 0%, #e6f7ff 100%);
+  min-height: 100vh;
+  padding: 40px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
