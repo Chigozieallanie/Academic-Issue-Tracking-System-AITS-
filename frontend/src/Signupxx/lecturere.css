@@ -20,3 +20,10 @@
   color: #374151;
   font-size: 1.1rem;
 }
+.dashboard-stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
