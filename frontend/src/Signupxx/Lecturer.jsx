@@ -65,3 +65,8 @@ const LecturerDashboard = ({ stats }) => {
         <h1>Lecturer Dashboard</h1>
         <p>Welcome back, {user.first_name}!</p>
       </div>
+<div className="dashboard-stats">
+        <div className="stat-card">
+          <div className="stat-value">{assignedIssues.length}</div>
+          <div className="stat-label">Assigned Issues</div>
+        </div>
