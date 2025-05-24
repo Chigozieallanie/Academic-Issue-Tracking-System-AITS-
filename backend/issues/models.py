@@ -91,7 +91,33 @@ class Comment(models.Model):
 
 
 
-
+class Notification(models.Model):
+    ISSUE_CREATED = 'issue_created'
+    ISSUE_UPDATED = 'issue_updated'
+    STATUS_CHANGED = 'status_changed'
+    COMMENT_ADDED = 'comment_added'
+    ASSIGNED = 'assigned'
+    
+    NOTIFICATION_TYPES = [
+        (ISSUE_CREATED, 'Issue Created'),
+        (ISSUE_UPDATED, 'Issue Updated'),
+        (STATUS_CHANGED, 'Status Changed'),
+        (COMMENT_ADDED, 'Comment Added'),
+        (ASSIGNED, 'Assigned'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, null=True, blank=True)
+    message = models.CharField(max_length=255)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.notification_type} for {self.user.username}"
 
 
 
@@ -101,13 +127,4 @@ class Comment(models.Model):
 
 
 
-
-class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
-    message = models.CharField(max_length=255)
-    is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Notification for {self.user.username}: {self.message}"
 
