@@ -4,7 +4,8 @@ import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import api from "../../services/api"
 import { useAuth } from "../../contexts/AuthContext"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import './Lecturer.css';
+//import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
 const LecturerDashboard = ({ stats }) => {
   const { user } = useAuth()
