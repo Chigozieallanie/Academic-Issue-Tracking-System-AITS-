@@ -20,11 +20,7 @@ class IsAdminUser(permissions.BasePermission):
 
     
 
-class IsLecturerRole():
-    allowed_roles = ['lecturer']
 
-class IsStudentRole():
-    allowed_roles = ['student']
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
