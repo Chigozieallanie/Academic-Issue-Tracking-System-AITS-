@@ -93,3 +93,27 @@
 .btn-secondary:hover {
   background: #c7d2fe;
 }
+.issue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.issue-card {
+  background: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(30, 64, 175, 0.05);
+  padding: 18px 22px;
+  transition: box-shadow 0.2s;
+  border-left: 5px solid #2563eb;
+}
+
+.issue-card:hover {
+  box-shadow: 0 4px 16px rgba(30, 64, 175, 0.13);
+}
+
+.issue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
