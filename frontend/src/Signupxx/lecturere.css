@@ -76,3 +76,20 @@
   text-decoration: none;
   display: inline-block;
 }
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #1e40af;
+}
+
+.btn-secondary {
+  background: #e0e7ff;
+  color: #1a237e;
+}
+
+.btn-secondary:hover {
+  background: #c7d2fe;
+}
