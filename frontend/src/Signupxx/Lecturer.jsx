@@ -109,3 +109,18 @@ const LecturerDashboard = ({ stats }) => {
                       {issue.status.replace("_", " ")}
                     </span>
                   </div>
+                  <p className="issue-description">{issue.description.substring(0, 100)}...</p>
+                  <div className="issue-footer">
+                    <span>Created by: {issue.created_by_name}</span>
+                    <span>Created: {new Date(issue.created_at).toLocaleDateString()}</span>
+                  </div>
+                  <div className="issue-actions">
+                    <Link to={`/issues/${issue.id}`} className="btn btn-primary">
+                      Review Issue
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
