@@ -15,3 +15,8 @@
   margin-bottom: 8px;
   font-weight: 700;
 }
+
+.dashboard-header p {
+  color: #374151;
+  font-size: 1.1rem;
+}
