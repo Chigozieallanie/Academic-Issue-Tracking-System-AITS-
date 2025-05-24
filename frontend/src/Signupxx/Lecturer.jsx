@@ -33,3 +33,9 @@ const LecturerDashboard = ({ stats }) => {
           { name: "Resolved", count: statusCounts.resolved },
           { name: "Closed", count: statusCounts.closed },
         ])
+         setLoading(false)
+      } catch (error) {
+        console.error("Error fetching assigned issues:", error)
+        setLoading(false)
+      }
+    }
