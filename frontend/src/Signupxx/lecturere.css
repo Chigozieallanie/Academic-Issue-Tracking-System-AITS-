@@ -44,3 +44,8 @@
   font-weight: 700;
   color: #2563eb;
 }
+.stat-label {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-top: 6px;
+}
