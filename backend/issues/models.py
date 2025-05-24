@@ -100,23 +100,7 @@ class Comment(models.Model):
 
 
 
-class CourseMaterial(models.Model):
-    title = models.CharField(max_length=200)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
-    file = models.FileField(upload_to='course_materials/')
-    uploaded_by = models.ForeignKey('issues.LecturerProfile', on_delete=models.CASCADE)
 
-
-class Attendance(models.Model):
-    student = models.ForeignKey('issues.StudentProfile', on_delete=models.CASCADE)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
-    date = models.DateField()
-    present = models.BooleanField(default=False)
-
-
-
-
-User = get_user_model()
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
