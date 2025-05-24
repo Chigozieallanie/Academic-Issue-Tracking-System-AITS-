@@ -18,3 +18,12 @@ const LecturerDashboard = ({ stats }) => {
         const userIssues = response.data.filter((issue) => issue.assigned_to === user.id)
         // Sort by creation date (newest first)
         const sortedIssues = userIssues.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+ setAssignedIssues(sortedIssues)
+
+        // Prepare data for the bar chart
+        const statusCounts = {
+          pending: userIssues.filter((issue) => issue.status === "pending").length,
+          in_progress: userIssues.filter((issue) => issue.status === "in_progress").length,
+          resolved: userIssues.filter((issue) => issue.status === "resolved").length,
+          closed: userIssues.filter((issue) => issue.status === "closed").length,
+        }
