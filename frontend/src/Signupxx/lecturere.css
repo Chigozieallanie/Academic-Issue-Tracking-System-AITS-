@@ -145,3 +145,32 @@
   background: #e6fffa;
   color: #059669;
 }
+.status-closed {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.issue-description {
+  color: #374151;
+  margin: 10px 0 0 0;
+  font-size: 1rem;
+}
+
+.issue-footer {
+  display: flex;
+  gap: 24px;
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-top: 10px;
+}
+
+.issue-actions {
+  margin-top: 12px;
+}
+
+.empty-state {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 1.1rem;
+  padding: 24px 0;
+}
