@@ -49,3 +49,11 @@
   font-size: 1rem;
   margin-top: 6px;
 }
+.dashboard-section {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(30, 64, 175, 0.07);
+  padding: 28px 32px;
+  margin: 0 auto 32px auto;
+  max-width: 900px;
+}
