@@ -124,3 +124,26 @@ const LecturerDashboard = ({ stats }) => {
             </div>
           )}
         </div>
+         <div className="dashboard-section">
+        <h2>In Progress Issues</h2>
+        {inProgressIssues.length === 0 ? (
+          <div className="empty-state">
+            <p>You have no issues currently in progress.</p>
+          </div>
+        ) : (
+          <div className="issue-list">
+            {inProgressIssues.slice(0, 3).map((issue) => (
+              <div key={issue.id} className="issue-card">
+                <div className="issue-header">
+                  <h3>
+                    <Link to={`/issues/${issue.id}`}>{issue.title}</Link>
+                  </h3>
+                  <span className={`status-badge ${getStatusClass(issue.status)}`}>
+                    {issue.status.replace("_", " ")}
+                  </span>
+                </div>
+                <p className="issue-description">{issue.description.substring(0, 100)}...</p>
+                <div className="issue-footer">
+                  <span>Created by: {issue.created_by_name}</span>
+                  <span>Updated: {new Date(issue.updated_at).toLocaleDateString()}</span>
+                </div>
