@@ -18,10 +18,7 @@ class IsAdminUser(permissions.BasePermission):
 
 
 
-    def has_permission(self, request, view):
-        # Check if the user's role is in the allowed roles
-        return request.user.is_authenticated and request.user.role in self.allowed_roles
-
+    
 class IsRegistrarRole():
     allowed_roles = ['registrar']
 
