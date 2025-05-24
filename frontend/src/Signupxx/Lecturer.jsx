@@ -147,3 +147,18 @@ const LecturerDashboard = ({ stats }) => {
                   <span>Created by: {issue.created_by_name}</span>
                   <span>Updated: {new Date(issue.updated_at).toLocaleDateString()}</span>
                 </div>
+                 <div className="issue-actions">
+                  <Link to={`/issues/${issue.id}`} className="btn btn-primary">
+                    Continue Working
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default LecturerDashboard
