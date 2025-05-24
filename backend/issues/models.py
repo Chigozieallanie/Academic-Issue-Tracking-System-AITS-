@@ -80,16 +80,24 @@ class Issue(models.Model):
 
 
 
+class Comment(models.Model):
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Comment on {self.issue.title} by {self.created_by.get_full_name()}"
+
+
+
+
+
+
 
 
     
 
-class Comment(models.Model):
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey('issues.CustomUser', on_delete=models.CASCADE)
-    issue = models.ForeignKey('Issue', on_delete=models.CASCADE, related_name='comments')
 
 
 class CourseMaterial(models.Model):
