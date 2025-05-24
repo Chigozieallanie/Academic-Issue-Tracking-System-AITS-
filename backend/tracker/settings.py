@@ -161,6 +161,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 if 'RENDER' in os.environ:
     DATABASES['default']['NAME'] = '/var/lib/render/db.sqlite3'
     DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+<<<<<<< Updated upstream:backend/tracker/settings.py
 
 
 import sys
@@ -180,3 +181,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  
+=======
+>>>>>>> Stashed changes:backend/tracker/tracker/settings.py
