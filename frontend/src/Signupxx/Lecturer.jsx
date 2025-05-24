@@ -56,3 +56,12 @@ const LecturerDashboard = ({ stats }) => {
         return ""
     }
   }
+  const pendingIssues = assignedIssues.filter((issue) => issue.status === "pending")
+  const inProgressIssues = assignedIssues.filter((issue) => issue.status === "in_progress")
+
+  return (
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1>Lecturer Dashboard</h1>
+        <p>Welcome back, {user.first_name}!</p>
+      </div>
