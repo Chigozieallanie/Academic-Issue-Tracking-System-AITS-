@@ -22,7 +22,6 @@ class CustomUserCreationForm(UserCreationForm):
             if not cleaned_data.get('college'):
                 self.add_error('college', 'College is required for students')
         else:
-            # Clear student_number for non-students
             cleaned_data['student_number'] = None
             if role in [User.LECTURER, User.ACADEMIC_REGISTRAR]:
                 if not cleaned_data.get('college'):
