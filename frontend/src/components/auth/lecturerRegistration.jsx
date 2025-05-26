@@ -93,6 +93,7 @@ const LecturerRegistration = () => {
           {errors.general && (
             <div className="alert alert-error">{errors.general}</div>
           )}
+          
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
